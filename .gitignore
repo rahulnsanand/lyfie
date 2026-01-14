@@ -1,0 +1,59 @@
+# --- Build & Tools ---
+.nx/
+.cache/
+.parcel-cache/
+
+# --- .NET Specific Additions ---
+# Ensure logs and crash dumps aren't uploaded
+*.log
+*.stackdump
+
+# EF Core Migrations (If you use them, you usually want to keep them, 
+# but ignore the script files sometimes generated)
+*.sql
+
+# --- React / Vite Additions ---
+# Vite builds occasionally generate these
+**/stats.html
+
+# --- Testing ---
+**/TestResults/
+**/coverage/
+
+# --- OS / IDE ---
+.vs/
+.vscode/
+.idea/
+.DS_Store
+*.user
+*.suo
+*.sw?
+
+# --- .NET (Backend) ---
+**/bin/
+**/obj/
+**/publish/
+*.db
+*.db-journal
+
+# Secrets: Ignore dev-specific and local settings
+# Keep the base appsettings.json for structure, ignore the rest
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/appsettings.json.user
+
+# --- Node / React (Frontend) ---
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/pnpm-debug.log*
+
+# Frontend Secrets
+**/.env
+**/.env.local
+**/.env.*.local
+
+# --- Project Specific ---
+.nx/
