@@ -1,7 +1,6 @@
 # Stage 1: Build React Frontend
 FROM node:20 AS node-builder
 WORKDIR /app
-# Note: folder name is 'web' based on your image
 COPY ./web/package*.json ./
 RUN npm install
 COPY ./web/ .
