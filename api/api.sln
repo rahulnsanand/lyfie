@@ -4,8 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lyfie.api", "lyfie.api\lyfie.api.csproj", "{7B82C35A-1C68-4D26-8525-C4CFCD7BF445}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A37B7E8A-5114-4004-BDE2-F5D2C0C24816} = {A37B7E8A-5114-4004-BDE2-F5D2C0C24816}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lyfie.core", "lyfie.core\lyfie.core.csproj", "{7DDB7E3E-7E95-40B4-ADA8-026036DDAEBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lyfie.data", "lyfie.data\lyfie.data.csproj", "{A37B7E8A-5114-4004-BDE2-F5D2C0C24816}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7DDB7E3E-7E95-40B4-ADA8-026036DDAEBB} = {7DDB7E3E-7E95-40B4-ADA8-026036DDAEBB}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,10 @@ Global
 		{7DDB7E3E-7E95-40B4-ADA8-026036DDAEBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DDB7E3E-7E95-40B4-ADA8-026036DDAEBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DDB7E3E-7E95-40B4-ADA8-026036DDAEBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A37B7E8A-5114-4004-BDE2-F5D2C0C24816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A37B7E8A-5114-4004-BDE2-F5D2C0C24816}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A37B7E8A-5114-4004-BDE2-F5D2C0C24816}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A37B7E8A-5114-4004-BDE2-F5D2C0C24816}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

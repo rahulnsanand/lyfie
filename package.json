@@ -1,0 +1,7 @@
+{
+  "name": "lyfie-web",
+  "version": "1.0.1",
+  "dependencies": {
+    "react-router-dom": "^7.12.0"
+  }
+}
