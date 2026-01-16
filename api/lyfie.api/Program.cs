@@ -3,6 +3,7 @@ using lyfie.core;
 using lyfie.api;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.DataProtection;
 
 public class Program
 {
@@ -32,6 +33,14 @@ public class Program
         builder.Services.AddAuthorization();
         builder.Services.AddIdentityApiEndpoints<IdentityUser>()
             .AddEntityFrameworkStores<LyfieDbContext>();
+
+        // Add this block to persist keys across container restarts
+        var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "data/keys");
+        if (!Directory.Exists(keysFolder)) Directory.CreateDirectory(keysFolder);
+
+        builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+            .SetApplicationName("LyfieApp");
 
         // 3. (Optional) Swagger Support for Testing
         builder.Services.AddEndpointsApiExplorer();
