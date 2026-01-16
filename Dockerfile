@@ -21,12 +21,11 @@ RUN dotnet publish -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=dotnet-builder /app/publish .
-# Copy React dist to .NET wwwroot for single-origin serving
 COPY --from=node-builder /app/dist ./wwwroot
 
-# Create a folder for the SQLite database to live in (Persistence)
+# NEW: Create the data folder and set the Connection String override
 RUN mkdir -p /app/data
-ENV DATABASE_PATH=/app/data/lyfie.db
+ENV ConnectionStrings__DefaultConnection="Data Source=/app/data/lyfie.db"
 
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "api.dll"]
