@@ -9,7 +9,6 @@ RUN npm run build
 # Stage 2: Build .NET Backend
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS dotnet-builder
 WORKDIR /src
-# Note: folder name is 'api' based on your image
 COPY ["api/api.csproj", "api/"] 
 RUN dotnet restore "api/api.csproj"
 COPY . .
@@ -22,7 +21,6 @@ WORKDIR /app
 COPY --from=dotnet-builder /app/publish .
 COPY --from=node-builder /app/dist ./wwwroot
 
-# NEW: Create the data folder and set the Connection String override
 RUN mkdir -p /app/data
 ENV ConnectionStrings__DefaultConnection="Data Source=/app/data/lyfie.db"
 
