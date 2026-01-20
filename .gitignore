@@ -58,3 +58,5 @@
 # --- Project Specific ---
 .nx/
 api/lyfie.api/data/keys/key-12463931-b109-448c-9383-1c813416153b.xml
+*.db-shm
+*.db-wal
