@@ -1,0 +1,7 @@
+{
+  "auth": {
+    "register_title": "Registrarse en Lyfie",
+    "email_placeholder": "Correo electrónico",
+    "submit_button": "Crear cuenta"
+  }
+}

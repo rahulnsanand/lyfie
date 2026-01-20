@@ -11,7 +11,6 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
         // 0. Define the policy
         builder.Services.AddCors(options =>
         {
@@ -20,7 +19,7 @@ public class Program
                 policy.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173") // Vite default ports
                       .AllowAnyHeader()
                       .AllowAnyMethod()
-                      .AllowCredentials(); // Required for Cookies/Identity
+                      .AllowCredentials();
             });
         });
 
