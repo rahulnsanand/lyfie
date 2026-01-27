@@ -1,11 +1,23 @@
+import React from 'react';
+import './ThemeToggle.css';
+
 export default function ThemeToggle({ toggleTheme }) {
   return (
     <button 
       onClick={toggleTheme}
-      className="sun-moon-container p-2 rounded-full hover:bg-white/10 transition-colors"
+      className="theme-toggle-btn sun-moon-container"
       aria-label="Toggle Theme"
     >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <svg 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      >
         <mask id="moon-mask">
           <rect x="0" y="0" width="100%" height="100%" fill="white" />
           <circle className="moon-mask" cx="35" cy="8" r="8" fill="black" />

@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import ThemeToggle from './ThemeToggle';
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import './Navbar.css';
 
 export default function Navbar({ isLoggedIn, toggleTheme, onLogout }) {
   const location = useLocation();
@@ -8,27 +9,27 @@ export default function Navbar({ isLoggedIn, toggleTheme, onLogout }) {
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 flex items-center justify-between p-4 bg-transparent backdrop-blur-sm">
-      <div className="flex items-center gap-4">
+    <nav className="navbar">
+      <div className="navbar-brand">
         {/* Only show Logo if NOT on an auth page OR if logged in */}
         {(!isAuthPage || isLoggedIn) && (
-          <Link to="/" className="font-comfortaa font-bold text-2xl text-green-600">
+          <Link to="/" className="logo-text">
             lyfie
           </Link>
         )}
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="navbar-actions">
         <ThemeToggle toggleTheme={toggleTheme} />        
 
         {/* Logged In Links */}
         {isLoggedIn && (
-          <div className="flex items-center gap-4 font-comfortaa">
-            <Link to="/dashboard" className="hover:text-green-500 transition-colors">Dashboard</Link>
-            <Link to="/profile" className="hover:text-green-500 transition-colors">Profile</Link>
+          <div className="nav-links">
+            <Link to="/dashboard" className="nav-link">Dashboard</Link>
+            <Link to="/profile" className="nav-link">Profile</Link>
             <button 
               onClick={onLogout}
-              className="bg-red-500/20 text-red-500 px-3 py-1 rounded-md hover:bg-red-500 hover:text-white transition-all"
+              className="logout-nav-btn"
             >
               Logout
             </button>
