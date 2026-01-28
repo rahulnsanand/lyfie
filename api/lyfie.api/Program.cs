@@ -20,8 +20,7 @@ public class Program
             {
                 policy.WithOrigins(
                     "http://localhost:5173", 
-                    "http://127.0.0.1:5173",
-                    "http://10.10.10.10:8080")
+                    "http://127.0.0.1:5173")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials(); // Required for HttpOnly Cookies
@@ -33,8 +32,8 @@ public class Program
             .AddCookie(options => {
                 options.Cookie.Name = "LyfieAuth";
                 options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.Strict;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 options.ExpireTimeSpan = TimeSpan.FromDays(7);
                 options.SlidingExpiration = true;
 
@@ -71,8 +70,16 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        var app = builder.Build();
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor |
+                                       Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
 
+        var app = builder.Build();
+        app.UseForwardedHeaders();
         // 6. Middleware Pipeline
         if (app.Environment.IsDevelopment())
         {
