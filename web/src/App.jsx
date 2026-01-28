@@ -2,46 +2,61 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-import { PublicRoute, ProtectedRoute} from './components/AuthGuards';
+import { PublicRoute, ProtectedRoute } from './components/AuthGuards';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Navbar from './components/Navbar/Navbar';
-import './App.css'; // Standard CSS import
+import { authService } from './services/authService'; // Import Auth service
+import './App.css';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Initialize theme from localStorage or system preference
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  // Apply theme class/attribute to <html> whenever 'theme' state changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
   const toggleTheme = () => {
-    const root = document.documentElement;
-    const isDark = root.getAttribute('data-theme') === 'dark';
-    const nextTheme = isDark ? 'light' : 'dark';
-    
-    root.setAttribute('data-theme', nextTheme);
-    localStorage.setItem('theme', nextTheme);
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch('/auth/manage/info');
+        // Must match [Route("api/auth")] + Endpoint name
+        // And MUST include credentials to send the cookie
+        const response = await fetch('/api/auth/me', { credentials: 'include' });
+        
         if (response.ok) {
           setIsAuthenticated(true);
-        } else if (response.status === 401) {
+        } else {
           setIsAuthenticated(false);
         }
       } catch (error) {
-        console.error("Authentication check failed:", error);
+        console.error("Auth check failed:", error);
         setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
       }
     };
-
     checkAuthStatus();
   }, []);
 
+  const handleLogout = async () => {
+    await authService.logout(); // Deletes cookie on server
+    setIsAuthenticated(false);  // Updates UI
+  };
+
   if (isLoading) {
-    // Replaced Tailwind classes with "loading-screen"
     return (
       <div className="loading-screen">
         <div className="spinner"></div>
@@ -54,8 +69,9 @@ export default function App() {
     <BrowserRouter>
       <Navbar 
         isLoggedIn={isAuthenticated} 
+        theme={theme}
         toggleTheme={toggleTheme} 
-        onLogout={() => setIsAuthenticated(false)} 
+        onLogout={handleLogout} 
       />
       <main className="app-content">
         <Routes>
@@ -73,10 +89,12 @@ export default function App() {
 
           <Route path="/dashboard" element={
             <ProtectedRoute isAuthenticated={isAuthenticated}>
-              <Dashboard onLogout={() => setIsAuthenticated(false)} />
+              <Dashboard onLogout={handleLogout} />
             </ProtectedRoute>
           } />
+          
           <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
     </BrowserRouter>

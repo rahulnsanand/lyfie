@@ -1,9 +1,9 @@
 using lyfie.data;
-using lyfie.core;
-using lyfie.api;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using lyfie.core.Interfaces;
+using lyfie.core.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 
 public class Program
 {
@@ -11,29 +11,45 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // 0. Define the policy
+        // 0. CORS Policy (Crucial for React + Cookies)
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("LyfieCorsPolicy", policy =>
             {
-                policy.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173") // Vite default ports
+                policy.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
-                      .AllowCredentials();
+                      .AllowCredentials(); // Required for HttpOnly Cookies
             });
         });
 
-        // 1. Add Database Context
+        // 1. Custom Cookie Authentication 
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options => {
+                options.Cookie.Name = "LyfieSession";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.ExpireTimeSpan = TimeSpan.FromDays(7);
+                options.SlidingExpiration = true;
+
+                // Return 401 instead of redirecting to a login page
+                options.Events.OnRedirectToLogin = context => {
+                    context.Response.StatusCode = 401;
+                    return Task.CompletedTask;
+                };
+            });
+
+        // 2. Database Context 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<LyfieDbContext>(options =>
             options.UseSqlite(connectionString));
 
-        // 2. Enable Identity Core Services
+        // 3. Dependency Injection for Custom Services
+        builder.Services.AddScoped<IPasswordService, PasswordService>();
         builder.Services.AddAuthorization();
-        builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-            .AddEntityFrameworkStores<LyfieDbContext>();
 
-        // Add this block to persist keys across container restarts
+        // 4. Data Protection (Persisting keys for session stability)
         var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "data/keys");
         if (!Directory.Exists(keysFolder)) Directory.CreateDirectory(keysFolder);
 
@@ -41,45 +57,34 @@ public class Program
             .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
             .SetApplicationName("LyfieApp");
 
-        // 3. (Optional) Swagger Support for Testing
+        // 5. API Controllers & Swagger
+        builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddControllers();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        // 6. Middleware Pipeline
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
             using var scope = app.Services.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<LyfieDbContext>();
             db.Database.Migrate();
         }
 
-        // Routing first
+        app.UseHttpsRedirection();
+
+        // Order matters: Routing -> CORS -> Auth
         app.UseRouting();
         app.UseCors("LyfieCorsPolicy");
 
-        app.UseHttpsRedirection();
-        
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapControllers();
-
-        // 4. Map the Identity Routes (/register, /login, etc.)
-        // Map the Identity Routes and group them in Swagger
-        app.MapGroup("/auth")
-           .MapIdentityApi<IdentityUser>()
-           .WithTags("Authentication");
-        // Add a manual logout endpoint since MapIdentityApi doesn't provide one
-        app.MapPost("/auth/logout", async (SignInManager<IdentityUser> signInManager) =>
-        {
-            await signInManager.SignOutAsync();
-            return Results.Ok();
-        }).WithTags("Authentication");
+        app.MapControllers(); // Ex. AuthController.cs will handle /api/auth/login etc.
 
         app.Run();
     }

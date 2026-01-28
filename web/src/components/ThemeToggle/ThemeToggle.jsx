@@ -1,7 +1,9 @@
 import React from 'react';
 import './ThemeToggle.css';
 
-export default function ThemeToggle({ toggleTheme }) {
+export default function ThemeToggle({ theme, toggleTheme }) {
+  const isDark = theme === 'dark';
+
   return (
     <button 
       onClick={toggleTheme}

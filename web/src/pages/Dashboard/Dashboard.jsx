@@ -5,23 +5,11 @@ import './Dashboard.css';
 export default function Dashboard({ onLogout }) {
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await authService.logout();
-      onLogout();
-      navigate('/login');
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
-  };
 
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1>User Dashboard</h1>
-        <button onClick={handleLogout} className="logout-button">
-          Sign Out
-        </button>
+        
       </header>
       
       <div className="dashboard-content">

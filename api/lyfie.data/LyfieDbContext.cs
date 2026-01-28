@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using lyfie.core.Entities;
 
 namespace lyfie.data;
 
@@ -7,16 +8,6 @@ namespace lyfie.data;
 // Users, Roles, and Claims.
 public class LyfieDbContext : IdentityDbContext
 {
-    public LyfieDbContext(DbContextOptions<LyfieDbContext> options)
-        : base(options)
-    {
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        // This is where you'll later configure Global Query Filters 
-        // to ensure User A never sees User B's data.
-    }
+    public LyfieDbContext(DbContextOptions<LyfieDbContext> options) : base(options) { }
+    public DbSet<LyfieUser> Users { get; set; }
 }

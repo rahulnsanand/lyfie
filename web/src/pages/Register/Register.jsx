@@ -98,7 +98,7 @@ export default function Register() {
         </button>
 
         <p className="footer-text">
-          {t('auth.already_account')}{" "}
+          {t('auth.already_have_account')}{" "}
           <Link to="/login" className="login-link">
             {t('auth.sign_in')}
           </Link>

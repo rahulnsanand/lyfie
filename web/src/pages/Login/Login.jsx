@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './Login.css';
 import logo from '../../assets/logo.svg';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -15,15 +16,17 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     const response = await authService.login(email, password);
     if (response.ok) {
-      onLogin();
+      onLogin(true);
       navigate('/dashboard');
     } else {
-      alert(t('auth.incorrect_username_password'));
+      onLogin(false);
+      toast.error(t('auth.incorrect_username_password'));
     }
   };
 
   return (
     <div className="login-container">
+      <Toaster />
       <form onSubmit={handleSubmit} className="login-card">
         <div className="login-header">
           <img src={logo} alt="Logo" className="login-logo" />
@@ -47,11 +50,11 @@ export default function Login({ onLogin }) {
         />
         
         <button type="submit" className="login-submit-btn">
-          Sign In
+          {t('auth.sign_in')}
         </button>
         
         <p className="login-footer">
-          Don't have an account? <Link to="/register" className="register-link">Register</Link>
+          {t('auth.already_have_account')} <Link to="/register" className="register-link">{t('auth.register')}</Link>
         </p>
       </form>
     </div>

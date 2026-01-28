@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import './Navbar.css';
 
-export default function Navbar({ isLoggedIn, toggleTheme, onLogout }) {
+export default function Navbar({ isLoggedIn, theme, toggleTheme, onLogout }) {
   const location = useLocation();
 
   // Hide specific items if we are on login or register pages
@@ -20,7 +20,7 @@ export default function Navbar({ isLoggedIn, toggleTheme, onLogout }) {
       </div>
 
       <div className="navbar-actions">
-        <ThemeToggle toggleTheme={toggleTheme} />        
+        <ThemeToggle theme={theme} toggleTheme={toggleTheme} />    
 
         {/* Logged In Links */}
         {isLoggedIn && (
@@ -29,8 +29,7 @@ export default function Navbar({ isLoggedIn, toggleTheme, onLogout }) {
             <Link to="/profile" className="nav-link">Profile</Link>
             <button 
               onClick={onLogout}
-              className="logout-nav-btn"
-            >
+              className="logout-nav-btn">
               Logout
             </button>
           </div>
