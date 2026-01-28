@@ -80,11 +80,15 @@ public class Program
         // Order matters: Routing -> CORS -> Auth
         app.UseRouting();
         app.UseCors("LyfieCorsPolicy");
+        app.UseDefaultFiles(); // 1. Looks for index.html
+        app.UseStaticFiles();  // 2. Serves the React JS/CSS files
 
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers(); // Ex. AuthController.cs will handle /api/auth/login etc.
+
+        app.MapFallbackToFile("index.html");
 
         app.Run();
     }
