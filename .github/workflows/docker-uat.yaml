@@ -1,0 +1,43 @@
+name: Build and Publish UAT Image
+
+on:
+  workflow_dispatch: # Allows manual trigger from the Actions tab
+  push:
+    branches:
+      - 'develop' # Optional: also auto-build when pushing to a dev branch
+
+jobs:
+  uat-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push UAT
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          # We keep platforms simple (amd64) for faster UAT builds
+          platforms: linux/amd64 
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/lyfie:uat
+            ghcr.io/${{ github.repository_owner }}/lyfie:test-${{ github.run_number }}
+          # Caching makes subsequent UAT builds much faster
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
