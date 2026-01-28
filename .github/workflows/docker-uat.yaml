@@ -1,10 +1,7 @@
 name: Build and Publish UAT Image
 
 on:
-  workflow_dispatch: # Allows manual trigger from the Actions tab
-  push:
-    branches:
-      - 'develop' # Optional: also auto-build when pushing to a dev branch
+  workflow_dispatch:
 
 jobs:
   uat-build:
@@ -33,11 +30,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          # We keep platforms simple (amd64) for faster UAT builds
-          platforms: linux/amd64 
+          no-cache: true  # Since you want a fresh build
           tags: |
-            ghcr.io/${{ github.repository_owner }}/lyfie:uat
-            ghcr.io/${{ github.repository_owner }}/lyfie:test-${{ github.run_number }}
-          # Caching makes subsequent UAT builds much faster
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            ghcr.io/lyfie-app/lyfie-uat:uat
+            ghcr.io/lyfie-app/lyfie-uat:uat-${{ github.run_number }}
