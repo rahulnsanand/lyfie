@@ -30,7 +30,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          no-cache: true  # Since you want a fresh build
+          no-cache: true 
           tags: |
             ghcr.io/lyfie-app/lyfie-uat:uat
             ghcr.io/lyfie-app/lyfie-uat:uat-${{ github.run_number }}
