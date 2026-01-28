@@ -30,10 +30,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          # Force a clean build
-          no-cache: true
-          pull: true # Also ensures it pulls the latest base images (node, dotnet, etc.)
-          platforms: linux/amd64
+          no-cache: true  # Since you want a fresh build
           tags: |
-            ghcr.io/${{ github.repository_owner }}/lyfie-uat:uat
-            ghcr.io/${{ github.repository_owner }}/lyfie-uat:test-${{ github.run_number }}
+            ghcr.io/lyfie-app/lyfie-uat:uat
+            ghcr.io/lyfie-app/lyfie-uat:test-${{ github.run_number }}
