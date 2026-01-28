@@ -18,7 +18,10 @@ public class Program
         {
             options.AddPolicy("LyfieCorsPolicy", policy =>
             {
-                policy.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173")
+                policy.WithOrigins(
+                    "http://localhost:5173", 
+                    "http://127.0.0.1:5173",
+                    "http://10.10.10.10:8080")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials(); // Required for HttpOnly Cookies
@@ -91,11 +94,9 @@ public class Program
                 db.Database.OpenConnection();
 
                 // 2. Disable the locking and journaling that causes 'Disk I/O Error' on Windows mounts
-                using (var command = db.Database.GetDbConnection().CreateCommand())
-                {
-                    command.CommandText = "PRAGMA journal_mode=OFF; PRAGMA locking_mode=NORMAL;";
-                    command.ExecuteNonQuery();
-                }
+                using var command = db.Database.GetDbConnection().CreateCommand();
+                command.CommandText = "PRAGMA journal_mode=OFF; PRAGMA locking_mode=NORMAL;";
+                command.ExecuteNonQuery();
             }
 
             // 3. NOW run migrations—the I/O error should be gone because journaling is OFF
