@@ -3,7 +3,7 @@ import { authService } from '../../services/authService';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import logo from '../../assets/logo.svg';
-import './Register.css';
+import './Authentication.css';
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Register() {
@@ -63,24 +63,24 @@ export default function Register() {
   return (
     <div className="register-container">
       <Toaster />
-      <form onSubmit={handleSubmit} className="register-form">
+      <form onSubmit={handleSubmit} className="auth-form">
         {error && <p className="error-message">{error}</p>}
-        <div className="register-header">
-          <img src={logo} alt="Logo" className="register-logo" />
-          <h2 className="register-title">{t('auth.register_title')}</h2>
+        <div className="auth-header">
+          <img src={logo} alt="Logo" className="auth-logo" />
+          <h2 className="auth-title">{t('auth.register_title')}</h2>
         </div>
 
         <input
-          placeholder={t('auth.email')}
-          className="input-field"
+          placeholder={t('auth.enter_email')}
+          className="auth-input-field"
           onChange={(e) => setEmail(e.target.value)}
           required
         />
 
         <input
           type="password"
-          placeholder={t('auth.password')}
-          className="input-field"
+          placeholder={t('auth.enter_password')}
+          className="auth-input-field"
           onChange={(e) => setPassword(e.target.value)}
           required
         />
@@ -88,18 +88,18 @@ export default function Register() {
         <input
           type="password"
           placeholder={t('auth.confirm_password')}
-          className="input-field"
+          className="auth-input-field"
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
 
-        <button type="submit" className="submit-button">
+        <button type="submit" className="auth-submit-btn">
           {t('auth.create_account')}
         </button>
 
-        <p className="footer-text">
+        <p className="auth-footer-text">
           {t('auth.already_have_account')}{" "}
-          <Link to="/login" className="login-link">
+          <Link to="/login" className="auth-link">
             {t('auth.sign_in')}
           </Link>
         </p>

@@ -2,10 +2,12 @@
   "auth": {
     "register_title": "Lyfie",
     "email": "Email",
+    "enter_email": "Enter email",
     "create_account": "Create Account",
     "sign_in": "Sign In",
     "sign_up": "Sign Up",
     "password": "Password",
+    "enter_password": "Enter password",
     "confirm_password": "Confirm Password",
     "already_have_account": "Already have an account?",
     "welcome": "Welcome, ",

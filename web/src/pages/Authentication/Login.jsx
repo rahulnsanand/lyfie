@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { authService } from '../../services/authService';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import './Login.css';
 import logo from '../../assets/logo.svg';
+import './Authentication.css';
 import toast, { Toaster } from 'react-hot-toast';
 
 export default function Login({ onLogin }) {
@@ -27,16 +27,16 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-container">
       <Toaster />
-      <form onSubmit={handleSubmit} className="login-card">
-        <div className="login-header">
-          <img src={logo} alt="Logo" className="login-logo" />
-          <h2 className="login-title">{t('auth.register_title')}</h2>
+      <form onSubmit={handleSubmit} className="auth-form">
+        <div className="auth-header">
+          <img src={logo} alt="Logo" className="auth-logo" />
+          <h2 className="auth-title">{t('auth.register_title')}</h2>
         </div>
         
         <input 
           type="email" 
           placeholder={t('auth.email')} 
-          className="login-input" 
+          className="auth-input-field" 
           onChange={(e) => setEmail(e.target.value)} 
           required 
         />
@@ -44,17 +44,17 @@ export default function Login({ onLogin }) {
         <input 
           type="password" 
           placeholder={t('auth.password')} 
-          className="login-input" 
+          className="auth-input-field" 
           onChange={(e) => setPassword(e.target.value)} 
           required 
         />
         
-        <button type="submit" className="login-submit-btn">
+        <button type="submit" className="auth-submit-btn">
           {t('auth.sign_in')}
         </button>
         
-        <p className="login-footer">
-          {t('auth.already_have_account')} <Link to="/register" className="register-link">{t('auth.register')}</Link>
+        <p className="auth-footer-text">
+          {t('auth.dont_have_account')} <Link to="/register" className="auth-link">{t('auth.register')}</Link>
         </p>
       </form>
     </div>

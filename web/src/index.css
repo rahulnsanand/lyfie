@@ -10,6 +10,7 @@
   /* Semantic Light Mode Colors */
   --color-bg-main: #ffffff;
   --color-text-main: #141414;
+  --color-text-hyperlink: #62a145;
   --color-bg-solid-dialog: #ffffff;
 }
 
@@ -17,6 +18,7 @@
 :root[data-theme='dark'] {
   --color-bg-main: #141414;
   --color-text-main: #f5f5f5;
+  --color-text-hyperlink: #22c55e;
   --color-bg-solid-dialog: #141414;
 }
 
@@ -37,6 +39,23 @@ body {
 
 input::placeholder {
   text-transform: lowercase;
+}
+
+/* Global Link Styling */
+a, .nav-link, .auth-link {
+  text-decoration: none !important;
+}
+
+/* Ensure the animation wrapper takes full height to prevent "jumping" */
+.app-content {
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Smooth background transition for theme switching */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* 4. Animation Classes */
