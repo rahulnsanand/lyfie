@@ -40,7 +40,6 @@
 /* This ensures the motion.div doesn't create extra spacing */
 .app-content > div {
   width: 100%;
-  position: absolute; /* Stack pages during the switch */
   top: 0;
   left: 0;
 }
