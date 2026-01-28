@@ -9,6 +9,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Console.WriteLine($"Running in Docker: {Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")}");
+
         var builder = WebApplication.CreateBuilder(args);
 
         // 0. CORS Policy (Crucial for React + Cookies)
@@ -26,7 +28,7 @@ public class Program
         // 1. Custom Cookie Authentication 
         builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options => {
-                options.Cookie.Name = "LyfieSession";
+                options.Cookie.Name = "LyfieAuth";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -42,6 +44,13 @@ public class Program
 
         // 2. Database Context 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+        // If we're in Docker, append the "No Locking" flags automatically
+        if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+        {
+            connectionString = "Data Source=/app/data/lyfie.db;Mode=ReadWriteCreate;";
+        }
+
         builder.Services.AddDbContext<LyfieDbContext>(options =>
             options.UseSqlite(connectionString));
 
@@ -50,11 +59,8 @@ public class Program
         builder.Services.AddAuthorization();
 
         // 4. Data Protection (Persisting keys for session stability)
-        var keysFolder = Path.Combine(builder.Environment.ContentRootPath, "data/keys");
-        if (!Directory.Exists(keysFolder)) Directory.CreateDirectory(keysFolder);
-
         builder.Services.AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+            .PersistKeysToDbContext<LyfieDbContext>()
             .SetApplicationName("LyfieApp");
 
         // 5. API Controllers & Swagger
@@ -75,7 +81,31 @@ public class Program
             db.Database.Migrate();
         }
 
-        app.UseHttpsRedirection();
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<LyfieDbContext>();
+
+            if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+            {
+                // 1. Manually open the connection
+                db.Database.OpenConnection();
+
+                // 2. Disable the locking and journaling that causes 'Disk I/O Error' on Windows mounts
+                using (var command = db.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "PRAGMA journal_mode=OFF; PRAGMA locking_mode=NORMAL;";
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            // 3. NOW run migrations—the I/O error should be gone because journaling is OFF
+            db.Database.Migrate();
+        }
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseHttpsRedirection(); // Only in Dev
+        }
 
         // Order matters: Routing -> CORS -> Auth
         app.UseRouting();

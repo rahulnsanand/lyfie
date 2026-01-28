@@ -1,0 +1,10 @@
+services:
+  lyfie-app:
+    build: .
+    container_name: lyfie-container
+    ports:
+      - "8080:8080"
+    volumes:
+      # Maps your local Windows folder to the path in appsettings.json
+      - C:/LyfieData:/app/data
+    restart: unless-stopped

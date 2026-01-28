@@ -18,6 +18,22 @@ export default function Dashboard({ onLogout }) {
             <h3>Welcome back!</h3>
             <p>You are successfully logged into Lyfie.</p>
           </div>
+          <div className="stat-card">
+            <h3>Welcome back!</h3>
+            <p>You are successfully logged into Lyfie.</p>
+          </div>
+          <div className="stat-card">
+            <h3>Welcome back!</h3>
+            <p>You are successfully logged into Lyfie.</p>
+          </div>
+          <div className="stat-card">
+            <h3>Welcome back!</h3>
+            <p>You are successfully logged into Lyfie.</p>
+          </div>
+          <div className="stat-card">
+            <h3>Welcome back!</h3>
+            <p>You are successfully logged into Lyfie.</p>
+          </div>
           {/* Add more cards here as you build your .NET API */}
         </section>
       </div>
