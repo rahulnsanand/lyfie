@@ -1,4 +1,4 @@
-name: Build and Publish Lyfie UAT Image
+name: Build and Publish UAT Image
 
 on:
   workflow_dispatch:
