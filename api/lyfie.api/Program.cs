@@ -72,7 +72,7 @@ public class Program
         // 4. Map the Identity Routes (/register, /login, etc.)
         // Map the Identity Routes and group them in Swagger
         app.MapGroup("/auth")
-           .MapIdentityApi<IdentityUser>() // or LyfieUser if you customized it
+           .MapIdentityApi<IdentityUser>()
            .WithTags("Authentication");
         // Add a manual logout endpoint since MapIdentityApi doesn't provide one
         app.MapPost("/auth/logout", async (SignInManager<IdentityUser> signInManager) =>
