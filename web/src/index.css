@@ -1,38 +1,64 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
-@import "tailwindcss";
 
-@theme {
+/* 1. Define Variables in :root */
+:root {
+  /* Brand & Fonts */
   --color-brand: #3b82f6;
   --font-sans: "Comfortaa", system-ui, sans-serif;
   --font-display: "Comfortaa", cursive;
 
-  /* Define your semantic variables here */
+  /* Semantic Light Mode Colors */
   --color-bg-main: #ffffff;
   --color-text-main: #141414;
+  --color-text-hyperlink: #62a145;
   --color-bg-solid-dialog: #ffffff;
 }
 
-/* Handle Dark Mode Variable Overrides */
+/* 2. Handle Dark Mode Overrides */
 :root[data-theme='dark'] {
   --color-bg-main: #141414;
   --color-text-main: #f5f5f5;
+  --color-text-hyperlink: #22c55e;
   --color-bg-solid-dialog: #141414;
 }
 
-/* Global Base Styles */
-@layer base {
-  body {
-    background-color: var(--color-bg-main);
-    color: var(--color-text-main);
-    transition: background-color 0.5s ease, color 0.5s ease;
-    font-family: var(--font-sans);
-    text-transform: lowercase;
-  }
-  input::placeholder {
-    text-transform: lowercase;
-  }
+/* 3. Global Base Styles (Replaces @layer base) */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  transition: background-color 0.5s ease, color 0.5s ease;
+  font-family: var(--font-sans);
+  text-transform: lowercase;
+}
+
+input::placeholder {
+  text-transform: lowercase;
+}
+
+/* Global Link Styling */
+a, .nav-link, .auth-link {
+  text-decoration: none !important;
+}
+
+/* Ensure the animation wrapper takes full height to prevent "jumping" */
+.app-content {
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Smooth background transition for theme switching */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 4. Animation Classes */
 .sun-moon-container {
   cursor: pointer;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -53,7 +79,6 @@
 }
 
 .moon-mask {
-  /* Note: Transitioning 'cx' attribute specifically */
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

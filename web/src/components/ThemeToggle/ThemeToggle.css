@@ -1,0 +1,31 @@
+.theme-toggle-btn {
+  /* Reset default button styles */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Layout & Shape (formerly p-2 rounded-full) */
+  padding: 8px;
+  border-radius: 50%;
+  
+  /* Color & Transition */
+  color: var(--color-text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect (formerly hover:bg-white/10) */
+.theme-toggle-btn:hover {
+  background-color: rgba(128, 128, 128, 0.15); /* A soft neutral hover */
+}
+
+/* Optional: Make the hover background subtlely different for dark/light */
+:root[data-theme='dark'] .theme-toggle-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+:root[data-theme='light'] .theme-toggle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}

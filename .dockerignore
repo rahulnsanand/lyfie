@@ -1,0 +1,8 @@
+bin/
+obj/
+web/node_modules/
+web/dist/
+api/**/bin/
+api/**/obj/
+*.db
+*.db-journal
