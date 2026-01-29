@@ -15,6 +15,11 @@
     "registration_failed": "Registration failed",
     "incorrect_username_password": "Incorrect username/password",
     "dont_have_account": "Don't have an account? ",
-    "register": "Register"
+    "register": "Register",
+    "network_error": "Network error, please try again later",
+    "invalid_email": "Invalid email address",
+    "password_weak": "Password is too weak",
+    "passwords_mismatch": "Passwords do not match",
+    "server_unreachable": "Unable to reach authentication server"
   }
 }
