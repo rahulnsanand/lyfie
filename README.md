@@ -84,6 +84,27 @@ docker run -d \
 
 > **note:** the first user to register automatically becomes the **administrator**, granting access to admin configurations.
 
+### Repository activity
+
+![Activities](https://repobeats.axiom.co/api/embed/d3165678e47e1e7e3d35546bb365a078902938b7.svg "Repobeats analytics image")
+
+### Star History
+
+<a href="https://www.star-history.com/#lyfie-app/lyfie&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=lyfie-app/lyfie&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=lyfie-app/lyfie&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=lyfie-app/lyfie&type=date&legend=top-left" />
+ </picture>
+</a>
+
+### Contributors
+<a href="https://github.com/lyfie-app/lyfie/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=lyfie-app/lyfie" />
+</a>
+
+
+
 📩 support
 ----------
 
