@@ -25,11 +25,18 @@ namespace lyfie.api.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize] // This ensures only valid cookies get through
         public IActionResult GetCurrentUser()
         {
-            // If the cookie is valid, .NET fills the 'User' object automatically
-            return Ok(new { email = User.Identity?.Name });
+            if (User.Identity is { IsAuthenticated: true })
+            {
+                return Ok(new
+                {
+                    email = User.Identity.Name,
+                    id = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                });
+            }
+
+            return Unauthorized(new { message = "Session expired or user not logged in." });
         }
 
         [HttpPost("register")]

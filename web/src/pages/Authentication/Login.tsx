@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 import { authService } from '../../services/authService';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -6,27 +7,38 @@ import logo from '../../assets/logo.svg';
 import './Authentication.css';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function Login({ onLogin }) {
+interface LoginProps {
+  onLogin: (status: boolean) => void;
+}
+
+export default function Login({ onLogin }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await authService.login(email, password);
-    if (response.ok) {
-      onLogin(true);
-      navigate('/dashboard');
-    } else {
-      onLogin(false);
-      toast.error(t('auth.incorrect_username_password'));
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();    
+    try {
+      const response = await authService.login(email, password);
+      
+      if (response.ok) {
+        onLogin(true);
+        navigate('/dashboard');
+      } else {
+        onLogin(false);
+        toast.error(t('auth.incorrect_username_password'));
+      }
+    } catch (error) {
+      toast.error(t('auth.network_error'));
+      console.error("Login Error:", error);
     }
   };
 
   return (
     <div className="login-container">
-      <Toaster />
+      <Toaster position="top-right" />
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="auth-header">
           <img src={logo} alt="Logo" className="auth-logo" />
@@ -37,6 +49,7 @@ export default function Login({ onLogin }) {
           type="email" 
           placeholder={t('auth.email')} 
           className="auth-input-field" 
+          value={email}
           onChange={(e) => setEmail(e.target.value)} 
           required 
         />
@@ -45,6 +58,7 @@ export default function Login({ onLogin }) {
           type="password" 
           placeholder={t('auth.password')} 
           className="auth-input-field" 
+          value={password}
           onChange={(e) => setPassword(e.target.value)} 
           required 
         />
@@ -54,7 +68,10 @@ export default function Login({ onLogin }) {
         </button>
         
         <p className="auth-footer-text">
-          {t('auth.dont_have_account')} <Link to="/register" className="auth-link">{t('auth.register')}</Link>
+          {t('auth.dont_have_account')}{' '}
+          <Link to="/register" className="auth-link">
+            {t('auth.register')}
+          </Link>
         </p>
       </form>
     </div>

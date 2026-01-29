@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Login from './pages/Authentication/Login';
@@ -6,24 +6,26 @@ import Register from './pages/Authentication/Register';
 import { PublicRoute, ProtectedRoute } from './components/AuthGuards';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Navbar from './components/Navbar/Navbar';
-import { authService } from './services/authService'; // Import Auth service
-import './App.css';
+import { authService } from './services/authService';
 import AnimatedPage from './pages/AnimatedPage';
+import './App.css';
+
+// 1. Define a literal type for Theme
+type Theme = 'light' | 'dark';
 
 export default function App() {
   const location = useLocation();
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Initialize theme from localStorage or system preference
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('theme');
+  // 2. State with explicit Type
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = localStorage.getItem('theme') as Theme | null;
     if (saved) return saved;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  // Apply theme class/attribute to <html> whenever 'theme' state changes
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -36,15 +38,9 @@ export default function App() {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        // Must match [Route("api/auth")] + Endpoint name
-        // And MUST include credentials to send the cookie
-        const response = await fetch('/api/auth/me', { credentials: 'include' });
-        
-        if (response.ok) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
+        const response = await authService.checkSession();
+        console.log("Auth check response:", response);
+        setIsAuthenticated(response.ok);
       } catch (error) {
         console.error("Auth check failed:", error);
         setIsAuthenticated(false);
@@ -56,8 +52,8 @@ export default function App() {
   }, []);
 
   const handleLogout = async () => {
-    await authService.logout(); // Deletes cookie on server
-    setIsAuthenticated(false);  // Updates UI
+    await authService.logout();
+    setIsAuthenticated(false);
   };
 
   if (isLoading) {
@@ -79,6 +75,7 @@ export default function App() {
       />
       <main className="app-content">
         <AnimatePresence mode="wait">
+          {/* location and key are essential for AnimatePresence to track route changes */}
           <Routes location={location} key={location.pathname}>
             <Route path="/login" element={
               <AnimatedPage>
@@ -98,7 +95,7 @@ export default function App() {
 
             <Route path="/dashboard" element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Dashboard onLogout={handleLogout} />
+                <Dashboard />
               </ProtectedRoute>
             } />
             
