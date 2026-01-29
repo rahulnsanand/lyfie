@@ -1,22 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using lyfie.core.Entities;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace lyfie.data;
 
 // IdentityDbContext<IdentityUser> automatically creates tables for 
 // Users, Roles, and Claims.
-public class LyfieDbContext : IdentityDbContext
+public class LyfieDbContext : DbContext, IDataProtectionKeyContext
 {
-    public LyfieDbContext(DbContextOptions<LyfieDbContext> options)
-        : base(options)
-    {
-    }
+    public LyfieDbContext(DbContextOptions<LyfieDbContext> options) : base(options) { }
+    public DbSet<LyfieUser> Users { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        // This is where you'll later configure Global Query Filters 
-        // to ensure User A never sees User B's data.
-    }
+    public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 }

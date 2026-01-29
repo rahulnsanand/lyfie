@@ -1,26 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
+  plugins: [react()],
   server: {
-    port: 5173,
+    port: 5173, // Vite port
     proxy: {
-      '/auth': {
-        target: 'https://localhost:44391',
+      '/api': {
+        target: 'https://localhost:44391', // .NET port
         changeOrigin: true,
-        secure: false,
-        ws: true,
+        secure: false, // Allows self-signed SSL certificates in development
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);
-          });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            proxyReq.setHeader('Origin', 'https://localhost:44391');
           });
         },
       }

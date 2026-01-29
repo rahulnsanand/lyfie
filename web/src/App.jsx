@@ -1,76 +1,112 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react'; // 1. Added useEffect to imports
-import Login from './pages/Login';
-import Register from './pages/Register';
-import { PublicRoute, ProtectedRoute} from './components/AuthGuards';
-import Dashboard from './pages/Dashboard';
-import Navbar from './components/Navbar';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import Login from './pages/Authentication/Login';
+import Register from './pages/Authentication/Register';
+import { PublicRoute, ProtectedRoute } from './components/AuthGuards';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Navbar from './components/Navbar/Navbar';
+import { authService } from './services/authService'; // Import Auth service
+import './App.css';
+import AnimatedPage from './pages/AnimatedPage';
 
 export default function App() {
+  const location = useLocation();
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Initialize theme from localStorage or system preference
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  // Apply theme class/attribute to <html> whenever 'theme' state changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
   const toggleTheme = () => {
-    const root = document.documentElement;
-    const isDark = root.getAttribute('data-theme') === 'dark';
-    const nextTheme = isDark ? 'light' : 'dark';
-    
-    root.setAttribute('data-theme', nextTheme);
-    localStorage.setItem('theme', nextTheme); // Keep the choice on refresh!
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch('/auth/manage/info');
+        // Must match [Route("api/auth")] + Endpoint name
+        // And MUST include credentials to send the cookie
+        const response = await fetch('/api/auth/me', { credentials: 'include' });
+        
         if (response.ok) {
           setIsAuthenticated(true);
-        } else if (response.status === 401) {
+        } else {
           setIsAuthenticated(false);
         }
       } catch (error) {
-        console.error("Authentication check failed:", error);
+        console.error("Auth check failed:", error);
         setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
       }
     };
-
     checkAuthStatus();
   }, []);
 
-  // 4. Show a loading spinner or blank screen while checking the cookie
+  const handleLogout = async () => {
+    await authService.logout(); // Deletes cookie on server
+    setIsAuthenticated(false);  // Updates UI
+  };
+
   if (isLoading) {
-    return <div className="flex items-center justify-center h-screen">Loading Lyfie...</div>;
+    return (
+      <div className="loading-screen">
+        <div className="spinner"></div>
+        <p>Loading Lyfie...</p>
+      </div>
+    );
   }
 
   return (
-    <BrowserRouter>
+    <>    
       <Navbar 
         isLoggedIn={isAuthenticated} 
+        theme={theme}
         toggleTheme={toggleTheme} 
-        onLogout={() => setIsAuthenticated(false)} 
+        onLogout={handleLogout} 
       />
-      <Routes>
-        <Route path="/login" element={
-          <PublicRoute isAuthenticated={isAuthenticated}>
-            <Login onLogin={() => setIsAuthenticated(true)} />
-          </PublicRoute>
-        } />
+      <main className="app-content">
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/login" element={
+              <AnimatedPage>
+                <PublicRoute isAuthenticated={isAuthenticated}>
+                  <Login onLogin={() => setIsAuthenticated(true)} />                  
+                </PublicRoute>
+              </AnimatedPage>
+            } />
 
-        <Route path="/register" element={
-          <PublicRoute isAuthenticated={isAuthenticated}>
-            <Register onLogin={() => setIsAuthenticated(true)} />
-          </PublicRoute>
-        } />
+            <Route path="/register" element={
+              <AnimatedPage>
+                <PublicRoute isAuthenticated={isAuthenticated}>
+                  <Register onLogin={() => setIsAuthenticated(true)} />
+                </PublicRoute>
+              </AnimatedPage>
+            } />
 
-        <Route path="/dashboard" element={
-          <ProtectedRoute isAuthenticated={isAuthenticated}>
-            <Dashboard onLogout={() => setIsAuthenticated(false)} />
-          </ProtectedRoute>
-        } />
-        <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
-      </Routes>
-    </BrowserRouter>
+            <Route path="/dashboard" element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Dashboard onLogout={handleLogout} />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </AnimatePresence>
+      </main>
+    </>
   );
 }
