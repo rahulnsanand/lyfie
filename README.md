@@ -3,7 +3,7 @@
 
 > _a selfie of your life_
 
-[**lyfie.app**](https://www.google.com/search?q=https://lyfie.app) | [**contact**](mailto:lyfieapp@gmail.com)
+[**lyfie.app**](https://lyfie.app) | [**contact**](mailto:lyfieapp@gmail.com)
 
 🌿 the vision
 -------------
@@ -89,7 +89,7 @@ docker run -d \
 
 we believe in building a tool that helps you live better. if you have ideas, issues, or just want to share how **lyfie** has helped you, reach out.
 
-*   **website:** [lyfie.app](https://www.google.com/search?q=https://lyfie.app)
+*   **website:** [lyfie.app](https://lyfie.app)
     
 *   **email:** [lyfieapp@gmail.com](mailto:lyfieapp@gmail.com)
     
