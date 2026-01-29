@@ -1,9 +1,13 @@
-📸 lyfie
-========
+<p align="center"> 
+    <br/>
+        <a href="https://opensource.org/license/agpl-v3"><img src="https://img.shields.io/badge/License-AGPL_v3-blue.svg?color=3F51B5&style=for-the-badge&label=License&logoColor=000000&labelColor=ececec" alt="License: AGPLv3"></a> 
+</p>
 
-> _a selfie of your life_
-
-[**lyfie.app**](https://lyfie.app) | [**contact**](mailto:lyfieapp@gmail.com)
+<p align="center">
+    <h3 align="center">lyfie</h3>
+    <h6 align="center">a selfie of your life</h3>
+</p>
+<br/>
 
 🌿 the vision
 -------------
