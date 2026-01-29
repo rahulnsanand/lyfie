@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { authService } from '../../services/authService';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -6,27 +6,44 @@ import logo from '../../assets/logo.svg';
 import './Authentication.css';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function Login({ onLogin }) {
+// 1. Define Props Interface
+interface LoginProps {
+  onLogin: (status: boolean) => void;
+}
+
+export default function Login({ onLogin }: LoginProps) {
+  // State inference works perfectly here; no need to manually type string
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  // 2. Type the Event handler
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await authService.login(email, password);
-    if (response.ok) {
-      onLogin(true);
-      navigate('/dashboard');
-    } else {
-      onLogin(false);
-      toast.error(t('auth.incorrect_username_password'));
+    
+    try {
+      const response = await authService.login(email, password);
+      
+      if (response.ok) {
+        onLogin(true);
+        navigate('/dashboard');
+      } else {
+        onLogin(false);
+        // t() will now autocomplete keys like 'auth.incorrect_username_password'
+        toast.error(t('auth.incorrect_username_password'));
+      }
+    } catch (error) {
+      // Handling network errors which fetch doesn't catch via 'ok'
+      toast.error(t('auth.network_error'));
+      console.error("Login Error:", error);
     }
   };
 
   return (
     <div className="login-container">
-      <Toaster />
+      <Toaster position="top-right" />
       <form onSubmit={handleSubmit} className="auth-form">
         <div className="auth-header">
           <img src={logo} alt="Logo" className="auth-logo" />
@@ -37,6 +54,7 @@ export default function Login({ onLogin }) {
           type="email" 
           placeholder={t('auth.email')} 
           className="auth-input-field" 
+          value={email} // Added value for controlled component pattern
           onChange={(e) => setEmail(e.target.value)} 
           required 
         />
@@ -45,6 +63,7 @@ export default function Login({ onLogin }) {
           type="password" 
           placeholder={t('auth.password')} 
           className="auth-input-field" 
+          value={password}
           onChange={(e) => setPassword(e.target.value)} 
           required 
         />
@@ -54,7 +73,10 @@ export default function Login({ onLogin }) {
         </button>
         
         <p className="auth-footer-text">
-          {t('auth.dont_have_account')} <Link to="/register" className="auth-link">{t('auth.register')}</Link>
+          {t('auth.dont_have_account')}{' '}
+          <Link to="/register" className="auth-link">
+            {t('auth.register')}
+          </Link>
         </p>
       </form>
     </div>
