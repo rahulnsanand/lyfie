@@ -16,7 +16,7 @@ export interface AuthError {
 
 export const authService = {
   async checkSession(): Promise<Response> {
-    const url = `${BASE_URL}/manage/info`;
+    const url = `${BASE_URL}/me`;
     return fetch(url, {
       method: "GET",
       credentials: 'include',

@@ -1,4 +1,5 @@
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
+import React from 'react';
 import { authService } from '../../services/authService';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -6,23 +7,19 @@ import logo from '../../assets/logo.svg';
 import './Authentication.css';
 import toast, { Toaster } from 'react-hot-toast';
 
-// 1. Define Props Interface
 interface LoginProps {
   onLogin: (status: boolean) => void;
 }
 
 export default function Login({ onLogin }: LoginProps) {
-  // State inference works perfectly here; no need to manually type string
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  // 2. Type the Event handler
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();    
     try {
       const response = await authService.login(email, password);
       
@@ -31,11 +28,9 @@ export default function Login({ onLogin }: LoginProps) {
         navigate('/dashboard');
       } else {
         onLogin(false);
-        // t() will now autocomplete keys like 'auth.incorrect_username_password'
         toast.error(t('auth.incorrect_username_password'));
       }
     } catch (error) {
-      // Handling network errors which fetch doesn't catch via 'ok'
       toast.error(t('auth.network_error'));
       console.error("Login Error:", error);
     }
@@ -54,7 +49,7 @@ export default function Login({ onLogin }: LoginProps) {
           type="email" 
           placeholder={t('auth.email')} 
           className="auth-input-field" 
-          value={email} // Added value for controlled component pattern
+          value={email}
           onChange={(e) => setEmail(e.target.value)} 
           required 
         />

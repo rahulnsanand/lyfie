@@ -38,8 +38,8 @@ export default function App() {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        // Use authService instead of naked fetch for better abstraction
         const response = await authService.checkSession();
+        console.log("Auth check response:", response);
         setIsAuthenticated(response.ok);
       } catch (error) {
         console.error("Auth check failed:", error);
@@ -95,7 +95,7 @@ export default function App() {
 
             <Route path="/dashboard" element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Dashboard onLogout={handleLogout} />
+                <Dashboard />
               </ProtectedRoute>
             } />
             
