@@ -1,4 +1,4 @@
-const BASE_URL = "api/Auth";
+const BASE_URL = "api/auth";
 
 // 1. Define types that match your .NET Core Identity models
 export interface AuthResponse {
@@ -16,7 +16,7 @@ export interface AuthError {
 
 export const authService = {
   async checkSession(): Promise<Response> {
-    const url = `${BASE_URL}/me`;
+    const url = `${BASE_URL}/status`;
     return fetch(url, {
       method: "GET",
       credentials: 'include',
