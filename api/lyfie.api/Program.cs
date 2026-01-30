@@ -50,15 +50,16 @@ public class Program
         // If in Docker, pull the connection string from an Env Var instead
         if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
         {
-            // Usually, Docker uses a full connection string like:
             // "Host=db;Database=lyfiedb;Username=postgres;Password=mysecret"
             connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? connectionString;
         }
 
         builder.Services.AddDbContext<LyfieDbContext>(options =>
-        options.UseNpgsql(connectionString,
-        x => x.MigrationsAssembly("lyfie.data"))
-        .UseSnakeCaseNamingConvention());
+            options.UseNpgsql(connectionString, x =>
+            {
+                x.MigrationsHistoryTable("__EFMigrationsHistory", "public");
+            })
+            .UseSnakeCaseNamingConvention());
 
         // 3. Dependency Injection for Custom Services
         builder.Services.AddScoped<IPasswordService, PasswordService>();

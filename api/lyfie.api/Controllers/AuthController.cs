@@ -12,19 +12,19 @@ using System.Security.Claims;
 namespace lyfie.api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
-        private readonly LyfieDbContext _context;
+        private readonly LyfieDbContext _dbcontext;
         private readonly IPasswordService _passwordService;
 
         public AuthController(LyfieDbContext context, IPasswordService passwordService)
         {
-            _context = context;
+            _dbcontext = context;
             _passwordService = passwordService;
         }
 
-        [HttpGet("me")]
+        [HttpGet("status")]
         public IActionResult GetCurrentUser()
         {
             if (User.Identity is { IsAuthenticated: true })
@@ -32,7 +32,7 @@ namespace lyfie.api.Controllers
                 return Ok(new
                 {
                     email = User.Identity.Name,
-                    id = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                    id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                 });
             }
 
@@ -43,7 +43,7 @@ namespace lyfie.api.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             // 1. Check if the user already exists
-            if (await _context.Users.AnyAsync(u => u.Email == model.Email))
+            if (await _dbcontext.Users.AnyAsync(u => u.Email == model.Email))
             {
                 return BadRequest(new { message = "Email is already in use." });
             }
@@ -57,8 +57,8 @@ namespace lyfie.api.Controllers
             };
 
             // 3. Save to database
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _dbcontext.Users.Add(user);
+            await _dbcontext.SaveChangesAsync();
 
             // 4. Auto-login the user after registration
             var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Email) };
@@ -71,7 +71,7 @@ namespace lyfie.api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == model.Email);
+            var user = await _dbcontext.Users.SingleOrDefaultAsync(u => u.Email == model.Email);
             if (user == null || !_passwordService.VerifyPassword(model.Password, user.PasswordHash))
                 return Unauthorized(new { message = "Invalid email or password" });
 
@@ -89,6 +89,37 @@ namespace lyfie.api.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok();
+        }
+
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword()
+        {
+            return Ok();
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword()
+        {
+            return Ok();
+        }
+
+        [HttpDelete("reset-pin")]
+        public async Task<IActionResult> ResetPin()
+        {
+            return Ok();
+        }
+
+        [HttpPost("set-pin")]
+        public async Task<IActionResult> SetPin()
+        {
+            return Ok();
+        }
+
+        [HttpPut("change-pin")]
+        public async Task<IActionResult> ChangePin()
+        {
             return Ok();
         }
     }
