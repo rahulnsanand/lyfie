@@ -22,20 +22,15 @@ export default function Login({ onLogin }: LoginProps) {
       e.preventDefault();    
       try {
         const response = await authService.login(email, password);
-        
-        // response.ok is true if status is 200-299
         if (response.ok) {
-          onLogin(true);
-          navigate('/dashboard');
+            // Only update the global app state when we have a confirmed session
+            onLogin(true); 
+            navigate('/dashboard');
         } else {
-          // This handles the 401 case
-          onLogin(false);
-          toast.error(t('auth.incorrect_username_password'));
+            toast.error(t('auth.incorrect_username_password'));
         }
       } catch (error) {
-        // This handles network/server-down cases
         toast.error(t('auth.network_error'));
-        console.error("Login Error:", error);
       }
   };
 
