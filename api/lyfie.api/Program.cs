@@ -45,16 +45,20 @@ public class Program
             });
 
         // 2. Database Context 
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        var connectionString = builder.Configuration.GetConnectionString("PGConnection");
 
-        // If we're in Docker, append the "No Locking" flags automatically
+        // If in Docker, pull the connection string from an Env Var instead
         if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
         {
-            connectionString = "Data Source=/app/data/lyfie.db;Mode=ReadWriteCreate;";
+            // Usually, Docker uses a full connection string like:
+            // "Host=db;Database=lyfiedb;Username=postgres;Password=mysecret"
+            connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? connectionString;
         }
 
         builder.Services.AddDbContext<LyfieDbContext>(options =>
-            options.UseSqlite(connectionString));
+        options.UseNpgsql(connectionString,
+        x => x.MigrationsAssembly("lyfie.data"))
+        .UseSnakeCaseNamingConvention());
 
         // 3. Dependency Injection for Custom Services
         builder.Services.AddScoped<IPasswordService, PasswordService>();
@@ -70,7 +74,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        _ = builder.Services.Configure<ForwardedHeadersOptions>(options =>
         {
             options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor |
                                        Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
@@ -80,39 +84,18 @@ public class Program
 
         var app = builder.Build();
         app.UseForwardedHeaders();
+
         // 6. Middleware Pipeline
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<LyfieDbContext>();
+            db.Database.Migrate();
+        }
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
-
-            using var scope = app.Services.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<LyfieDbContext>();
-            db.Database.Migrate();
-        }
-
-        using (var scope = app.Services.CreateScope())
-        {
-            var db = scope.ServiceProvider.GetRequiredService<LyfieDbContext>();
-
-            if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
-            {
-                // 1. Manually open the connection
-                db.Database.OpenConnection();
-
-                // 2. Disable the locking and journaling that causes 'Disk I/O Error' on Windows mounts
-                using var command = db.Database.GetDbConnection().CreateCommand();
-                command.CommandText = "PRAGMA journal_mode=OFF; PRAGMA locking_mode=NORMAL;";
-                command.ExecuteNonQuery();
-            }
-
-            // 3. NOW run migrations—the I/O error should be gone because journaling is OFF
-            db.Database.Migrate();
-        }
-
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseHttpsRedirection(); // Only in Dev
         }
 
         // Order matters: Routing -> CORS -> Auth
