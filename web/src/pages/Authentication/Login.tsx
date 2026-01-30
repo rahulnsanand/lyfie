@@ -18,22 +18,25 @@ export default function Login({ onLogin }: LoginProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();    
-    try {
-      const response = await authService.login(email, password);
-      
-      if (response.ok) {
-        onLogin(true);
-        navigate('/dashboard');
-      } else {
-        onLogin(false);
-        toast.error(t('auth.incorrect_username_password'));
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();    
+      try {
+        const response = await authService.login(email, password);
+        
+        // response.ok is true if status is 200-299
+        if (response.ok) {
+          onLogin(true);
+          navigate('/dashboard');
+        } else {
+          // This handles the 401 case
+          onLogin(false);
+          toast.error(t('auth.incorrect_username_password'));
+        }
+      } catch (error) {
+        // This handles network/server-down cases
+        toast.error(t('auth.network_error'));
+        console.error("Login Error:", error);
       }
-    } catch (error) {
-      toast.error(t('auth.network_error'));
-      console.error("Login Error:", error);
-    }
   };
 
   return (
