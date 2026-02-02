@@ -1,6 +1,0 @@
-@lyfie.api_HostAddress = http://localhost:5249
-
-GET {{lyfie.api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

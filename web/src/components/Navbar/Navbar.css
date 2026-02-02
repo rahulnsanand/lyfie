@@ -25,7 +25,7 @@
   font-family: var(--font-sans); /* Uses Comfortaa from index.css */
   font-weight: bold;
   font-size: 1.5rem;
-  color: #16a34a; /* green-600 */
+  color: var(--color-brand-primary); /* green-600 */
   text-decoration: none;
 }
 

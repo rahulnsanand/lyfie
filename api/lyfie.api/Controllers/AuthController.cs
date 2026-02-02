@@ -1,95 +1,171 @@
 ﻿using lyfie.core.DTOs;
-using lyfie.core.Entities;
+using lyfie.core.Entities.Auth;
+using lyfie.core.Entities.Users;
+using lyfie.core.Enums.Authentication;
 using lyfie.core.Interfaces;
 using lyfie.data;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace lyfie.api.Controllers
+[ApiController]
+[Route("api/auth")]
+public class AuthController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    private readonly LyfieDbContext _dbcontext;
+    private readonly IPasswordService _passwordService;
+    private readonly SymmetricSecurityKey _signingKey;
+
+    public AuthController(SymmetricSecurityKey signingKey,
+        IPasswordService passwordService, LyfieDbContext context)
     {
-        private readonly LyfieDbContext _context;
-        private readonly IPasswordService _passwordService;
+        _signingKey = signingKey;
+        _passwordService = passwordService;
+        _dbcontext = context;
+    }
 
-        public AuthController(LyfieDbContext context, IPasswordService passwordService)
+    [HttpGet("status")]
+    public IActionResult GetCurrentUser()
+    {
+        // Use User.Identity.IsAuthenticated check
+        if (User.Identity?.IsAuthenticated == true)
         {
-            _context = context;
-            _passwordService = passwordService;
+            return Ok(new
+            {
+                email = User.FindFirst(ClaimTypes.Email)?.Value,
+                id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+            });
         }
 
-        [HttpGet("me")]
-        public IActionResult GetCurrentUser()
-        {
-            if (User.Identity is { IsAuthenticated: true })
-            {
-                return Ok(new
-                {
-                    email = User.Identity.Name,
-                    id = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
-                });
-            }
+        return Unauthorized(new { message = "Session expired or user not logged in." });
+    }
 
-            return Unauthorized(new { message = "Session expired or user not logged in." });
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterDTO model)
+    {
+        if (await _dbcontext.Users.AnyAsync(u => u.Email == model.Email))
+        {
+            return BadRequest(new { message = "Email is already in use." });
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
+        var user = new LyfieUser
         {
-            // 1. Check if the user already exists
-            if (await _context.Users.AnyAsync(u => u.Email == model.Email))
-            {
-                return BadRequest(new { message = "Email is already in use." });
-            }
+            Name = model.Name,
+            Email = model.Email,
+            PasswordHash = _passwordService.HashPassword(model.Password),
+            CreatedAt = DateTime.UtcNow
+        };
 
-            // 2. Hash the password using Argon2 service
-            var user = new LyfieUser
+        _dbcontext.Users.Add(user);
+
+        // Log registration
+        _dbcontext.AuthenticationLogs.Add(CreateLog(user.Id.ToString(), user.Email, AuthenticationCategory.Register));
+
+        await _dbcontext.SaveChangesAsync();
+
+        AppendAuthCookie(user);
+        return Ok(new { message = "Registered successfully" });
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDTO model)
+    {
+        var user = await _dbcontext.Users.SingleOrDefaultAsync(u => u.Email == model.Email);
+
+        if (user == null || !_passwordService.VerifyPassword(model.Password, user.PasswordHash))
+        {
+            _dbcontext.AuthenticationLogs.Add(CreateLog("null", model.Email, AuthenticationCategory.FailedLogin));
+            await _dbcontext.SaveChangesAsync();
+            return Unauthorized(new { message = "Invalid email or password" });
+        }
+
+        _dbcontext.AuthenticationLogs.Add(CreateLog(user.Id.ToString(), user.Email, AuthenticationCategory.Login));
+        await _dbcontext.SaveChangesAsync();
+
+        AppendAuthCookie(user);
+        return Ok(new { message = "Logged in successfully" });
+    }
+
+    [HttpPost("logout")]
+    [Authorize] // Ensures only logged-in users can trigger a logout log
+    public async Task<IActionResult> Logout()
+    {
+        // 1. Extract info from the JWT claims (which were pulled from the cookie)
+        var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+
+        // 2. Log the logout event
+        if (!string.IsNullOrEmpty(userIdString) && Guid.TryParse(userIdString, out Guid userId))
+        {
+            var authLog = new AuthenticationLog
             {
-                Email = model.Email,
-                PasswordHash = _passwordService.HashPassword(model.Password),
-                CreatedAt = DateTime.UtcNow
+                UserId = userId.ToString(),
+                UserEmail = userEmail ?? "Unknown",
+                AuthenticationType = AuthenticationType.Password,
+                AuthenticationCategory = AuthenticationCategory.Logout,
+                LogTimestamp = DateTime.UtcNow
             };
 
-            // 3. Save to database
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            // 4. Auto-login the user after registration
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Email) };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
-
-            return Ok(new { message = "Registration successful", email = user.Email });
+            _dbcontext.AuthenticationLogs.Add(authLog);
+            await _dbcontext.SaveChangesAsync();
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO model)
+        // 3. Clear the Cookie
+        // Use the same options (SameSite/Secure) used during creation to ensure browser compliance
+        var cookieOptions = new CookieOptions
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == model.Email);
-            if (user == null || !_passwordService.VerifyPassword(model.Password, user.PasswordHash))
-                return Unauthorized(new { message = "Invalid email or password" });
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.UtcNow.AddDays(-1) // Force immediate expiration
+        };
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Email) };
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        Response.Cookies.Delete("LyfieAuth", cookieOptions);
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(identity));
+        return Ok(new { message = "Logged out successfully" });
+    }
 
-            return Ok(new { email = user.Email });
-        }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+    // --- HELPER METHODS ---
+    private void AppendAuthCookie(LyfieUser user)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var claims = new[] {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email)
+        };
+
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return Ok();
-        }
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var tokenString = tokenHandler.WriteToken(token);
+
+        Response.Cookies.Append("LyfieAuth", tokenString, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Lax,
+            Expires = DateTime.UtcNow.AddDays(7)
+        });
+    }
+
+    private AuthenticationLog CreateLog(string userId, string email, AuthenticationCategory category)
+    {
+        return new AuthenticationLog
+        {
+            UserId = userId,
+            UserEmail = email,
+            AuthenticationType = AuthenticationType.Password,
+            AuthenticationCategory = category,
+            LogTimestamp = DateTime.UtcNow
+        };
     }
 }

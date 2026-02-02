@@ -1,55 +1,26 @@
-const BASE_URL = "api/Auth";
+import api from './api';
 
-// 1. Define types that match your .NET Core Identity models
-export interface AuthResponse {
-  email: string;
-  isEmailConfirmed: boolean;
-  // add other fields returned by /manage/info
-}
-
-export interface AuthError {
-  type: string;
-  title: string;
-  status: number;
-  errors: Record<string, string[]>;
-}
+const BASE_URL = "/auth"; // The 'api' instance already has the base URL prefix
 
 export const authService = {
-  async checkSession(): Promise<Response> {
-    const url = `${BASE_URL}/me`;
-    return fetch(url, {
-      method: "GET",
-      credentials: 'include',
-    });
+  async checkSession() {
+    // Axios returns a promise with a 'data' property
+    const response = await api.get(`${BASE_URL}/status`);
+    return response.data;
   },
 
-  async register(email: string, password: string): Promise<Response> {
-    const url = `${BASE_URL}/register`;
-    return fetch(url, {
-      method: "POST",
-      credentials: 'include',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  async register(name: string, email: string, password: string) {
+    const response = await api.post(`${BASE_URL}/register`, { name, email, password });
+    return response.data;
   },
 
-  async login(email: string, password: string): Promise<Response> {
-    const url = `${BASE_URL}/login`;    
-    return fetch(url, {
-      method: "POST",
-      credentials: 'include',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+  async login(email: string, password: string) {
+    const response = await api.post(`${BASE_URL}/login`, { email, password });
+    return response.data;
   },
 
-  async logout(): Promise<Response> {
-    return fetch(`${BASE_URL}/logout`, { 
-      method: "POST", 
-      credentials: 'include', 
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+  async logout() {
+    const response = await api.post(`${BASE_URL}/logout`);
+    return response.data;
   }
-};
+};  

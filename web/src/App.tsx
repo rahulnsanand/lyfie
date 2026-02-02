@@ -1,8 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import Login from './pages/Authentication/Login';
-import Register from './pages/Authentication/Register';
+import Authentication from './pages/Authentication/Authentication';
 import { PublicRoute, ProtectedRoute } from './components/AuthGuards';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Navbar from './components/Navbar/Navbar';
@@ -10,16 +9,13 @@ import { authService } from './services/authService';
 import AnimatedPage from './pages/AnimatedPage';
 import './App.css';
 
-// 1. Define a literal type for Theme
 type Theme = 'light' | 'dark';
 
 export default function App() {
   const location = useLocation();
-
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // 2. State with explicit Type
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('theme') as Theme | null;
     if (saved) return saved;
@@ -35,27 +31,43 @@ export default function App() {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
   };
 
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        const response = await authService.checkSession();
-        console.log("Auth check response:", response);
-        setIsAuthenticated(response.ok);
-      } catch (error) {
-        console.error("Auth check failed:", error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
+  const checkAuthStatus = async () => {
+    try {
+      const data = await authService.checkSession();
+      setIsAuthenticated(true);
+    } catch (error: any) {
+      // If it's a 401, we don't log it as an "error" because it's expected
+      if (error.response?.status !== 401) {
+        console.error("Authentication check failed", error);
       }
-    };
-    checkAuthStatus();
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const effectRan = useRef(false);
+  useEffect(() => {
+    if (effectRan.current === false) {
+      checkAuthStatus();
+      
+      return () => {
+        effectRan.current = true;
+      };
+    }
   }, []);
 
   const handleLogout = async () => {
-    await authService.logout();
-    setIsAuthenticated(false);
+    try {
+      await authService.logout(); // Tells server to delete the cookie
+    } catch (error) {
+      console.error("Logout request failed", error);
+    } finally {
+      // Always clear the UI state regardless of server response
+      setIsAuthenticated(false);
+    }
   };
-
+  
   if (isLoading) {
     return (
       <div className="loading-screen">
@@ -75,31 +87,32 @@ export default function App() {
       />
       <main className="app-content">
         <AnimatePresence mode="wait">
-          {/* location and key are essential for AnimatePresence to track route changes */}
           <Routes location={location} key={location.pathname}>
-            <Route path="/login" element={
+            <Route path="/auth" element={
               <AnimatedPage>
                 <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Login onLogin={() => setIsAuthenticated(true)} />                  
+                  <Authentication onLogin={() => setIsAuthenticated(true)} />                  
                 </PublicRoute>
               </AnimatedPage>
             } />
 
-            <Route path="/register" element={
-              <AnimatedPage>
-                <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Register onLogin={() => setIsAuthenticated(true)} />
-                </PublicRoute>
-              </AnimatedPage>
-            } />
-
-            <Route path="/dashboard" element={
-              <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Dashboard />
-              </ProtectedRoute>
-            } />
+            {/* Protected Routes Block */}
+            {[
+              "/dashboard", "/settings", "/admin/settings", 
+              "/journal", "/habits", "/ledger", "/vault"
+            ].map((path) => (
+              <Route 
+                key={path}
+                path={path} 
+                element={
+                  <ProtectedRoute isAuthenticated={isAuthenticated}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } 
+              />
+            ))}
             
-            <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />} />
+            <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth"} />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </AnimatePresence>
