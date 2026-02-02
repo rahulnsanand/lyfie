@@ -45,7 +45,42 @@ namespace lyfie.data.Migrations
                     b.ToTable("data_protection_keys", (string)null);
                 });
 
-            modelBuilder.Entity("lyfie.core.Entities.LyfieUser", b =>
+            modelBuilder.Entity("lyfie.core.Entities.Auth.AuthenticationLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("AuthenticationCategory")
+                        .HasColumnType("integer")
+                        .HasColumnName("authentication_category");
+
+                    b.Property<int>("AuthenticationType")
+                        .HasColumnType("integer")
+                        .HasColumnName("authentication_type");
+
+                    b.Property<DateTime>("LogTimestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("log_timestamp");
+
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_email");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_authentication_log");
+
+                    b.ToTable("authentication_log", (string)null);
+                });
+
+            modelBuilder.Entity("lyfie.core.Entities.Users.LyfieUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -61,15 +96,24 @@ namespace lyfie.data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("email");
 
+                    b.Property<bool>("IsTwoFactored")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_two_factored");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
 
                     b.HasKey("Id")
-                        .HasName("pk_users");
+                        .HasName("pk_lyfie_user");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("lyfie_user", (string)null);
                 });
 #pragma warning restore 612, 618
         }

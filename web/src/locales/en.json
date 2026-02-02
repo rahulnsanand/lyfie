@@ -1,25 +1,43 @@
 {
+  "appname": "Lyfie",
   "auth": {
-    "register_title": "Lyfie",
-    "email": "Email",
-    "enter_email": "Enter email",
-    "create_account": "Create Account",
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
-    "password": "Password",
-    "enter_password": "Enter password",
-    "confirm_password": "Confirm Password",
-    "already_have_account": "Already have an account?",
-    "welcome": "Welcome, ",
-    "registered_successfully": "Registered successfully",
-    "registration_failed": "Registration failed",
-    "incorrect_username_password": "Incorrect username/password",
-    "dont_have_account": "Don't have an account? ",
-    "register": "Register",
-    "network_error": "Network error, please try again later",
-    "invalid_email": "Invalid email address",
-    "password_weak": "Password is too weak",
-    "passwords_mismatch": "Passwords do not match",
-    "server_unreachable": "Unable to reach authentication server"
+    "text":{
+      "user_register_title": "User Registration",
+      "user_login_title": "User Login",
+      "OAuth_title": "OAuth Login",
+      "admin_register_title": "Admin Registration",
+      "name": "Name",
+      "user_email": "User email",
+      "admin_email": "Admin Email",
+      "user_password": "User password",
+      "admin_password": "Admin Password",
+      "user_confirm_password": "Confirm User Password",
+      "admin_confirm_password": "Confirm Admin Password",      
+      "sign_in": "Sign In",
+      "sign_up": "Sign Up",      
+      "signing_in": "Signing In",
+      "signing_up": "Signing Up" 
+    },  
+    "message":{      
+      "admin_register_caption": "Since you are the first user on the system, you will be assigned as the Admin and will be assigned server admin privileges. Please create an Admin account to get started.",
+      "already_have_account": "Already have an account?",
+      "dont_have_account": "Don't have an account? ",
+      "welcome": "Welcome, ",
+      "registered_successfully": "Registered successfully" 
+    },
+    "error":{
+      "name_required": "Name is required",
+      "email_required": "Email is required",
+      "password_required": "Password is required",
+      "confirm_password_required": "Confirm Password is required",
+      "invalid_email": "Invalid email address",
+      "password_weak": "Password is too weak",
+      "passwords_mismatch": "Passwords do not match",
+      "registration_failed": "Registration failed",
+      "incorrect_username_password": "Incorrect username/password",      
+      "network_error": "Network error, please try again later",    
+      "server_unreachable": "Unable to reach authentication server",
+      "signin_failed": "Sign In failed"
+    }   
   }
 }

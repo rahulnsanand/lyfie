@@ -13,6 +13,22 @@ namespace lyfie.data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "authentication_log",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
+                    user_email = table.Column<string>(type: "text", nullable: false),
+                    log_timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    authentication_type = table.Column<int>(type: "integer", nullable: false),
+                    authentication_category = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_authentication_log", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "data_protection_keys",
                 columns: table => new
                 {
@@ -27,17 +43,19 @@ namespace lyfie.data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "users",
+                name: "lyfie_user",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
                     password_hash = table.Column<string>(type: "text", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    is_two_factored = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_users", x => x.id);
+                    table.PrimaryKey("pk_lyfie_user", x => x.id);
                 });
         }
 
@@ -45,10 +63,13 @@ namespace lyfie.data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "authentication_log");
+
+            migrationBuilder.DropTable(
                 name: "data_protection_keys");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "lyfie_user");
         }
     }
 }

@@ -1,14 +1,4 @@
-.register-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-height: 100vh;
-  width: 80%;
-  overflow: hidden;
-  transition: background-color 0.5s ease;
-}
-
-.login-container {
+.auth-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -28,8 +18,12 @@
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);  
   background-color: rgba(255, 255, 255, 0.6); 
   backdrop-filter: blur(12px);
-  transition: background-color 0.5s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: translateY(0);
+  transition: transform 0.3s ease, background-color 0.5s ease, box-shadow 0.3s ease;
+  
 }
+
 
 /* Logic for Dark Mode transparency */
 :root[data-theme='dark'] .auth-form {
@@ -49,7 +43,7 @@
 .auth-title {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #16a34a; /* green-600 */
+  color: var(--color-brand-primary); /* green-600 */
 }
 
 .auth-input-field {
@@ -72,7 +66,7 @@
 
 .auth-submit-btn {
   width: 100%;
-  background-color: #16a34a;
+  background-color: var(--color-brand);
   color: white;
   padding: 0.75rem;
   border-radius: 0.5rem;
@@ -85,7 +79,7 @@
 }
 
 .auth-submit-btn:hover {
-  background-color: #15803d; /* green-700 */
+  background-color: var(--color-brand-deep); /* green-700 */
 }
 
 .auth-footer-text {
@@ -96,7 +90,7 @@
 }
 
 .auth-link {
-  color: var(--color-text-hyperlink);
+  color: var(--color-brand);
   font-weight: 600;
   text-decoration: none;
 }
@@ -118,4 +112,41 @@
   margin-bottom: 1rem;
   text-align: center;
   border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Container for the hidden field */
+.confirm-password-wrapper {
+    display: grid;
+    grid-template-rows: 0fr; /* Collapsed state */
+    transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease-out;
+    opacity: 0;
+    overflow: hidden;
+}
+
+/* Expanded state when visible */
+.confirm-password-wrapper.is-visible {
+    grid-template-rows: 1fr; /* Expand to fit content */
+    opacity: 1;
+}
+
+/* Ensure the input inside doesn't snap */
+.confirm-password-wrapper > input {
+    min-height: 0; 
+}
+
+@keyframes pulse-glow {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.02); filter: brightness(1.1); box-shadow: 0 0 5px var(--color-brand); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+.auth-submit-btn.is-loading {
+  animation: pulse-glow 1.5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .auth-container { flex-direction: column; padding: 1rem; }
+  .auth-form { flex: 0 0 100%; margin: 0; width: 100%; }
+  .register-sidebar { display: none; }
 }
