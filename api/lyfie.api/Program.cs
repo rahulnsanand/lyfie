@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Security.Cryptography;
 using System.Text;
-
+    
 public class Program
 {
     public static void Main(string[] args)
@@ -46,11 +47,17 @@ public class Program
             options.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context => {
-                    // Check for cookie first
-                    var token = context.Request.Cookies["LyfieAuth"];
-                    if (!string.IsNullOrEmpty(token))
+                    // 1. Try to get token from the standard Authorization header (Bearer)
+                    string authHeader = context.Request.Headers["Authorization"];
+                    if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
                     {
-                        context.Token = token;
+                        context.Token = authHeader.Substring("Bearer ".Length).Trim();
+                    }
+
+                    // 2. If no header, fallback to the cookie (for React/Browser)
+                    if (string.IsNullOrEmpty(context.Token))
+                    {
+                        context.Token = context.Request.Cookies["LyfieAuth"];
                     }
                     return Task.CompletedTask;
                 }
@@ -97,7 +104,37 @@ public class Program
         builder.Services.AddAuthorization();
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CMS API", Version = "v1" });
+
+            const string schemeId = "Bearer";
+
+            // 1. Define the Security Scheme
+            c.AddSecurityDefinition(schemeId, new OpenApiSecurityScheme
+            {
+                Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and your token.",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http, // Use 'Http' for modern Bearer schemes
+                Scheme = "bearer",             // lowercase 'bearer' is standard for RFC 7235
+                BearerFormat = "JWT"
+            });
+
+            // 2. Correct Delegate Pattern for .NET 10
+            c.AddSecurityRequirement(document =>
+            {
+                var requirement = new OpenApiSecurityRequirement();
+
+                // Use the new OpenApiSecuritySchemeReference class
+                var schemeReference = new OpenApiSecuritySchemeReference(schemeId, document);
+
+                requirement.Add(schemeReference, new List<string>());
+
+                return requirement;
+            });
+        });
 
         var app = builder.Build();
         app.UseForwardedHeaders();

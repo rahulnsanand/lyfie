@@ -66,8 +66,14 @@ public class AuthController : ControllerBase
 
         await _dbcontext.SaveChangesAsync();
 
-        AppendAuthCookie(user);
-        return Ok(new { message = "Registered successfully" });
+        var token = AppendAuthCookie(user);
+
+        return Ok(new
+        {
+            message = "Registered successfully",
+            token = token, // Postman/Android will use this
+            user = new { user.Email, user.Name } // Good for offline "Lite" profile
+        });
     }
 
     [HttpPost("login")]
@@ -85,8 +91,14 @@ public class AuthController : ControllerBase
         _dbcontext.AuthenticationLogs.Add(CreateLog(user.Id.ToString(), user.Email, AuthenticationCategory.Login));
         await _dbcontext.SaveChangesAsync();
 
-        AppendAuthCookie(user);
-        return Ok(new { message = "Logged in successfully" });
+        var token = AppendAuthCookie(user);
+
+        return Ok(new
+        {
+            message = "Logged in successfully",
+            token = token, // Postman/Android will use this
+            user = new { user.Email, user.Name } // Good for offline "Lite" profile
+        });
     }
 
     [HttpPost("logout")]
@@ -130,7 +142,7 @@ public class AuthController : ControllerBase
 
 
     // --- HELPER METHODS ---
-    private void AppendAuthCookie(LyfieUser user)
+    private string AppendAuthCookie(LyfieUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var claims = new[] {
@@ -158,6 +170,8 @@ public class AuthController : ControllerBase
             SameSite = isHttps ? SameSiteMode.None : SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddDays(7)
         });
+
+        return tokenString;
     }
 
     private AuthenticationLog CreateLog(string userId, string email, AuthenticationCategory category)
