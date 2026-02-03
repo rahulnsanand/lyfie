@@ -1,13 +1,9 @@
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 50;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 2rem;
+  transition: all 0.3s ease;
   
   /* Glassmorphism effect */
   background-color: transparent;
@@ -16,17 +12,18 @@
   border-bottom: 1px solid rgba(128, 128, 128, 0.1);
 }
 
+.mobile-search-trigger, .search-close-btn {
+  display: none; /* Hidden on desktop */
+}
+
+.search-input:focus {
+  border-color: var(--color-brand-primary); /* Pink for focus states */
+  box-shadow: 0 0 0 3px var(--color-pink-soft);
+}
+
 .navbar-brand {
   display: flex;
   align-items: center;
-}
-
-.logo-text {
-  font-family: var(--font-sans); /* Uses Comfortaa from index.css */
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: var(--color-brand-primary); /* green-600 */
-  text-decoration: none;
 }
 
 .navbar-actions {
@@ -38,31 +35,137 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem; /* Slightly more gap for icons */
 }
 
-.nav-link {
-  text-decoration: none;
+.nav-icon-link {
   color: var(--color-text-main);
-  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 8px;
 }
 
-.nav-link:hover {
-  color: #22c55e; /* green-500 */
+.nav-icon-link:hover {
+  color: var(--color-brand-primary);
 }
 
-.logout-nav-btn {
-  background-color: rgba(239, 68, 68, 0.15); /* red-500 with 15% opacity */
+.logout-icon-btn {
+  background: transparent;
   color: #ef4444;
   border: none;
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.logout-nav-btn:hover {
-  background-color: #ef4444;
-  color: #ffffff;
+.logout-icon-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  transform: translateX(2px); /* Subtle nudge effect for "leaving" */
+}
+
+/* Search Bar Styling */
+.navbar-search {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--color-text-muted, #94a3b8);
+  pointer-events: none;
+}
+
+.global-search-input {
+  width: 100%;
+  padding: 0.6rem 1rem 0.6rem 2.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(128, 128, 128, 0.1);
+  background: rgba(128, 128, 128, 0.05);
+  color: var(--color-text-main);
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  transition: all 0.2s ease;
+}
+
+.global-search-input:focus {
+  outline: none;
+  background: rgba(128, 128, 128, 0.1);
+  border-color: var(--color-brand-primary);
+}
+
+/* Alignment for left and right sections */
+.navbar-left { display: flex; align-items: center; }
+.navbar-actions { display: flex; align-items: center; justify-content: flex-end; gap: 1.5rem; }
+
+/* Layout adjustment when search is active on mobile */
+.navbar.search-mode .navbar-left,
+.navbar.search-mode .navbar-actions {
+  visibility: hidden; /* Hide other elements while searching */
+}
+
+/* Responsive: Hide search or shrink on small screens */
+/* --- Mobile Logic (< 768px) --- */
+@media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+  }
+
+  .navbar-search {
+    display: none; /* Hide default desktop search */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg-solid-dialog, white); /* Ensure it covers logo */
+    padding: 0 1rem;
+    align-items: center;
+    z-index: 60;
+  }
+
+  /* Show search when state is active */
+  .navbar-search.active {
+    display: flex;
+  }
+
+  .navbar-left.hidden {
+    display: none;
+  }
+
+  .mobile-search-trigger {
+    display: flex;
+    background: none;
+    border: none;
+    color: var(--color-text-main);
+    cursor: pointer;
+  }
+
+  .search-close-btn {
+    display: block;
+    background: none;
+    border: none;
+    padding-left: 10px;
+    cursor: pointer;
+  }
+
+  .search-wrapper {
+    max-width: 100%; /* Take full width on mobile */
+  }
 }

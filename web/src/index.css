@@ -6,11 +6,16 @@
   --color-brand-primary: #fab1b9;
   --color-brand: #62a145;
   --color-brand-deep: #44752d;
+
+  /* Derived Tints for Hovers/Backgrounds */
+  --color-pink-soft: rgba(250, 177, 185, 0.15);
+  --color-green-soft: rgba(98, 161, 69, 0.1);
+
   --font-sans: "Comfortaa", system-ui, sans-serif;
   --font-display: "Comfortaa", cursive;
 
   /* Semantic Light Mode Colors */
-  --color-bg-main: #ffffff;
+  --color-bg-main: #fafafa;
   --color-text-main: #141414;
   --color-text-hyperlink: #62a145;
   --color-bg-solid-dialog: #ffffff;
@@ -21,10 +26,10 @@
   --color-brand-primary: #fab1b9;
   --color-brand: #62a145;
   --color-brand-deep: #43702e;
-  --color-bg-main: #131313;
+  --color-bg-main: #000000;
   --color-text-main: #f5f5f5;
   --color-text-hyperlink: #22c55e;
-  --color-bg-solid-dialog: #141414;
+  --color-bg-solid-dialog: #101010;
 }
 
 /* 3. Global Base Styles (Replaces @layer base) */
@@ -49,6 +54,19 @@ input::placeholder {
 /* Global Link Styling */
 a, .nav-link, .auth-link {
   text-decoration: none !important;
+}
+
+.logo-text {
+  font-family: var(--font-sans); /* Uses Comfortaa from index.css */
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--color-brand-primary);
+  text-decoration: none;
+}
+
+/* Navigation & Actions */
+.nav-link:hover, .nav-icon-link:hover {
+  color: var(--color-brand); /* Switch to green on hover to indicate action */
 }
 
 /* Ensure the animation wrapper takes full height to prevent "jumping" */

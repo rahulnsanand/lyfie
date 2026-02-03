@@ -39,5 +39,8 @@
       "server_unreachable": "Unable to reach authentication server",
       "signin_failed": "Sign In failed"
     }   
+  },
+  "navbar": {
+    "global_search_hint": "Search your lyfie..."
   }
 }
