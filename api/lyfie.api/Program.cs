@@ -3,6 +3,7 @@ using lyfie.core.Services;
 using lyfie.data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
@@ -80,6 +81,14 @@ public class Program
             .PersistKeysToDbContext<LyfieDbContext>()
             .SetApplicationName("LyfieApp");
 
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            // Only add this if you know your internal network is secure
+            options.KnownIPNetworks.Clear();
+            options.KnownProxies.Clear();
+        });
+
         // --- 5. SERVICES ---
         builder.Services.AddScoped<IPasswordService, PasswordService>();
         // Add a singleton for Key so Controller can use it to generate the token
@@ -91,6 +100,7 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+        app.UseForwardedHeaders();
 
         // --- 6. MIGRATIONS & MIDDLEWARE ---
         using (var scope = app.Services.CreateScope())

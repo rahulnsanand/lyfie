@@ -147,12 +147,15 @@ public class AuthController : ControllerBase
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(token);
+        var isHttps = Request.IsHttps;
 
         Response.Cookies.Append("LyfieAuth", tokenString, new CookieOptions
         {
             HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Lax,
+            // If accessed via http://x.x.x.x, Secure is false.
+            // If accessed via https://www.domain.com, Secure is true.
+            Secure = isHttps,
+            SameSite = isHttps ? SameSiteMode.None : SameSiteMode.Lax,
             Expires = DateTime.UtcNow.AddDays(7)
         });
     }
