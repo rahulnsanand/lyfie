@@ -47,26 +47,31 @@ body {
   text-transform: lowercase;
 }
 
+/* Tooltip Styling */
+.tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  transform: translateX(-50%);  
+  background-color: var(--color-tooltip-bg, #333);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  font-family: var(--font-family-main);
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 1s; 
+}
+
 input::placeholder {
   text-transform: lowercase;
-}
-
-/* Global Link Styling */
-a, .nav-link, .auth-link {
-  text-decoration: none !important;
-}
-
-.logo-text {
-  font-family: var(--font-sans); /* Uses Comfortaa from index.css */
-  font-weight: 800;
-  font-size: 1.5rem;
-  color: var(--color-brand-primary);
-  text-decoration: none;
-}
-
-/* Navigation & Actions */
-.nav-link:hover, .nav-icon-link:hover {
-  color: var(--color-brand); /* Switch to green on hover to indicate action */
 }
 
 /* Ensure the animation wrapper takes full height to prevent "jumping" */

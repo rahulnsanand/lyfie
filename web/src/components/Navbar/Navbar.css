@@ -1,171 +1,244 @@
+/* --- Main Navbar Layout --- */
 .navbar {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  height: 80px;
+  display: flex;
   align-items: center;
-  padding: 0.75rem 2rem;
-  transition: all 0.3s ease;
+  justify-content: space-between;
   
-  /* Glassmorphism effect */
-  background-color: transparent;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px); /* Safari support */
-  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+  /* Initial State: Matches Dashboard (90%) */
+  position: sticky;
+  top: 0;
+  left: 5%; 
+  right: 5%;
+  width: 90%;
+  margin: 0 auto;
+  
+  padding: 0 2rem;
+  background-color: var(--bg-navbar);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 100;
+
+  /* Performance optimization for 4K */
+  will-change: left, right, top, width, height;
+  transition: 
+    left 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    right 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.4s ease,
+    border-radius 0.4s ease;
 }
 
-.mobile-search-trigger, .search-close-btn {
-  display: none; /* Hidden on desktop */
+/* --- Floating Condensed State --- */
+.navbar.scrolled {
+  top: 15px;
+  /* Shrink to a much smaller centered dock */
+  left: 20%; 
+  right: 20%;
+  width: 60%; 
+  
+  /* Constraints for very large screens */
+  max-width: 900px; 
+  height: 64px;
+  padding: 0 1.5rem;
+  
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+  
+  /* Frosted Glass */
+  background-color: var(--bg-navbar-transparent, rgba(255, 255, 255, 0.7)); 
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-.search-input:focus {
-  border-color: var(--color-brand-primary); /* Pink for focus states */
-  box-shadow: 0 0 0 3px var(--color-pink-soft);
+/* Children scaling (No more scaleX needed, so text stays perfect) */
+.navbar.scrolled .navbar-logo {
+  height: 30px;
 }
 
-.navbar-brand {
+.navbar.scrolled .logo-text {
+  font-size: 1.4rem;
+}
+
+/* --- Left Section: Logo --- */
+.navbar-left {
   display: flex;
   align-items: center;
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none !important;
+}
+
+.navbar-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  transition: height 0.3s ease;
+}
+
+.logo-text {
+  font-family: 'Comfortaa', cursive;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: var(--color-brand-primary);
+  transition: font-size 0.3s ease;
+}
+
+/* --- Right Section: Actions --- */
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem; /* Slightly more gap for icons */
+  gap: 0.75rem;
 }
 
-.nav-icon-link {
-  color: var(--color-text-main);
+/* --- Unified Icon Button Styles --- */
+.search-trigger-btn,
+.nav-icon-link,
+.theme-toggle-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 12px;
+  color: var(--color-text-main);
   transition: all 0.2s ease;
-  padding: 0.5rem;
-  border-radius: 8px;
+  text-decoration: none !important;
 }
 
-.nav-icon-link:hover {
+.search-trigger-btn:hover,
+.nav-icon-link:hover,
+.theme-toggle-btn:hover {
+  color: var(--color-brand-primary);
+  background-color: rgba(128, 128, 128, 0.1);
+  transform: translateY(-1px);
+}
+
+/* --- Search Modal (Command Palette) --- */
+.search-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 15vh;
+  z-index: 1000;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.search-modal-content {
+  background: var(--bg-navbar);
+  width: 90%;
+  max-width: 650px;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.modal-search-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-search-wrapper svg {
   color: var(--color-brand-primary);
 }
 
-.logout-icon-btn {
+.modal-search-input {
+  flex: 1;
   background: transparent;
-  color: #ef4444;
   border: none;
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.logout-icon-btn:hover {
-  background-color: rgba(239, 68, 68, 0.1);
-  transform: translateX(2px); /* Subtle nudge effect for "leaving" */
-}
-
-/* Search Bar Styling */
-.navbar-search {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.search-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  display: flex;
-  align-items: center;
-}
-
-.search-icon {
-  position: absolute;
-  left: 12px;
-  color: var(--color-text-muted, #94a3b8);
-  pointer-events: none;
-}
-
-.global-search-input {
-  width: 100%;
-  padding: 0.6rem 1rem 0.6rem 2.5rem;
-  border-radius: 12px;
-  border: 1px solid rgba(128, 128, 128, 0.1);
-  background: rgba(128, 128, 128, 0.05);
-  color: var(--color-text-main);
-  font-size: 0.9rem;
-  font-family: var(--font-sans);
-  transition: all 0.2s ease;
-}
-
-.global-search-input:focus {
   outline: none;
+  font-family: 'Comfortaa', cursive;
+  font-size: 1.2rem;
+  color: var(--color-text-main);
+}
+
+.esc-tag {
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
   background: rgba(128, 128, 128, 0.1);
-  border-color: var(--color-brand-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--color-text-muted);
 }
 
-/* Alignment for left and right sections */
-.navbar-left { display: flex; align-items: center; }
-.navbar-actions { display: flex; align-items: center; justify-content: flex-end; gap: 1.5rem; }
 
-/* Layout adjustment when search is active on mobile */
-.navbar.search-mode .navbar-left,
-.navbar.search-mode .navbar-actions {
-  visibility: hidden; /* Hide other elements while searching */
+/* --- Animations --- */
+@keyframes modalFadeIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.98) translateY(-10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1) translateY(0); 
+  }
 }
 
-/* Responsive: Hide search or shrink on small screens */
-/* --- Mobile Logic (< 768px) --- */
+/* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
+  /* Base state on mobile (90% width, just like your dashboard) */
   .navbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.75rem 1rem;
-  }
-
-  .navbar-search {
-    display: none; /* Hide default desktop search */
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--color-bg-solid-dialog, white); /* Ensure it covers logo */
+    width: 95%; /* Slightly wider on mobile for better thumb reach */
+    left: 2.5%;
+    right: 2.5%;
     padding: 0 1rem;
-    align-items: center;
-    z-index: 60;
+    height: 70px;
   }
 
-  /* Show search when state is active */
-  .navbar-search.active {
-    display: flex;
+  /* Scrolled state on mobile */
+  .navbar.scrolled {
+    width: 92%; /* Don't shrink too much on mobile */
+    left: 4%;
+    right: 4%;
+    top: 8px; /* Smaller gap from the top */
+    height: 60px;
+    padding: 0 1rem;
+    border-radius: 16px; /* Slightly tighter corners for smaller screens */
   }
 
-  .navbar-left.hidden {
-    display: none;
+  /* Hide the text if it gets too crowded, or just shrink it */
+  .logo-text {
+    font-size: 1.3rem;
   }
 
-  .mobile-search-trigger {
-    display: flex;
-    background: none;
-    border: none;
-    color: var(--color-text-main);
-    cursor: pointer;
+  /* Adjust spacing between search and theme toggle */
+  .navbar-actions {
+    gap: 0.75rem;
   }
+}
 
-  .search-close-btn {
-    display: block;
-    background: none;
-    border: none;
-    padding-left: 10px;
-    cursor: pointer;
+/* --- Ultra Small Screens (Phones < 400px) --- */
+@media (max-width: 400px) {
+  .logo-text {
+    display: none; /* Only show logo icon to save space */
   }
-
-  .search-wrapper {
-    max-width: 100%; /* Take full width on mobile */
+  
+  .navbar-left {
+    gap: 0;
   }
 }

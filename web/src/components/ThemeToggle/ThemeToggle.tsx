@@ -1,45 +1,29 @@
-import React from 'react';
+import { SunIcon, MoonIcon } from "@phosphor-icons/react";
 import './ThemeToggle.css';
 
-export default function ThemeToggle({ theme, toggleTheme }) {
+interface ThemeToggleProps {
+  theme: string;
+  toggleTheme: () => void;
+}
+
+export default function ThemeToggle({ theme, toggleTheme }: ThemeToggleProps) {
   const isDark = theme === 'dark';
+  const label = isDark ? "Switch to Light" : "Switch to Dark";
 
   return (
-    <button 
-      onClick={toggleTheme}
-      className="theme-toggle-btn sun-moon-container"
-      aria-label="Toggle Theme"
-    >
-      <svg 
-        width="24" 
-        height="24" 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
+    <div className="tooltip-container">
+      <button 
+        onClick={toggleTheme}
+        className="theme-toggle-btn"
+        aria-label={label}
       >
-        <mask id="moon-mask">
-          <rect x="0" y="0" width="100%" height="100%" fill="white" />
-          <circle className="moon-mask" cx="35" cy="8" r="8" fill="black" />
-        </mask>
-        
-        {/* The center circle (Sun body / Moon body) */}
-        <circle cx="12" cy="12" r="5" fill="currentColor" mask="url(#moon-mask)" />
-
-        {/* The Sun Rays */}
-        <g className="sun-ray" stroke="currentColor">
-          <line x1="12" y1="1" x2="12" y2="3" />
-          <line x1="12" y1="21" x2="12" y2="23" />
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-          <line x1="1" y1="12" x2="3" y2="12" />
-          <line x1="21" y1="12" x2="23" y2="12" />
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-        </g>
-      </svg>
-    </button>
+        {isDark ? (
+          <SunIcon size={24} weight="bold" />
+        ) : (
+          <MoonIcon size={24} weight="bold" />
+        )}
+      </button>
+      <span className="tooltip-text">{label}</span>
+    </div>
   );
 }

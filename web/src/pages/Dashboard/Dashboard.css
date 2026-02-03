@@ -1,103 +1,87 @@
 .dashboard-container {
   /* Increase width to 95% and push max-width to 2560px (4K support) */
-  width: 95%;
+  width: 100%;
   max-width: 2200px; 
   margin: 0 auto;
-  
-  /* Buffer for fixed Navbar */
-  padding: 120px 0 3rem 0; 
+  padding: 10px 0 3rem 0; 
+  perspective: 1000px;
 }
 
 /* --- Bento Grid --- */
 .bento-grid-12 {
   display: grid;
-  /* 12 equal columns for maximum flexibility */
   grid-template-columns: repeat(12, 1fr);
-  grid-auto-rows: 120px; /* Smaller base row for more control */
-  gap: 1rem;
-}
-
-/* Bento Grid Accents */
-.bento-item .item-header {
-  color: var(--color-brand-primary);
-  border-bottom: 1px solid var(--color-pink-soft);
+  grid-auto-rows: 140px;
+  gap: 1.5rem;
+  transform-style: preserve-3d;
 }
 
 .bento-item {
-  background: var(--color-bg-solid-dialog);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(128, 128, 128, 0.1);
-  border-radius: 1.25rem;
-  padding: 1.25rem;
+  position: relative;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  padding: 1.5rem;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  z-index: 15;
 }
 
-.item-header {
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: var(--color-brand);
-  margin-bottom: 0.75rem;
-  opacity: 0.7;
+.item-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  opacity: 0.2;
+  pointer-events: none;
+}
+ 
+
+/* TYPE 1: Fluid Waves (Abstract/Organic) */
+.fluid-waves {
+  filter: blur(40px);
+  background: var(--widget-accent);
+  background-image: 
+    radial-gradient(at 0% 0%, var(--widget-accent-light) 0, transparent 50%), 
+    radial-gradient(at 100% 100%, var(--widget-accent-deep) 0, transparent 50%);
+  animation: drift 10s infinite alternate ease-in-out;
 }
 
-.header-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* Space between icon and text */
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+/* TYPE 2: Dual Pulse (Two "Energy" sources) */
+.dual-pulse {
+  filter: blur(50px);
 }
-
-.item-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-size: 0.95rem;
-}
-
-/* Styling specific inputs inside boxes */
-.search-input {
-  width: 100%;
-  background: rgba(0, 0, 0, 0.05);
-  border: none;
-  padding: 0.5rem;
-  border-radius: 8px;
-  outline: none;
-}
-
-textarea {
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border: none;
-  resize: none;
-  outline: none;
-  font-family: inherit;
-  font-size: 0.9rem;
-}
-
-.avatar-circle {
-  width: 50px;
-  height: 50px;
-  background: var(--color-brand-primary);
-  color: white;
+.dual-pulse::before, .dual-pulse::after {
+  content: '';
+  position: absolute;
+  width: 150px; height: 150px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+  opacity: 0.8;
+}
+.dual-pulse::before {
+  background: var(--widget-accent-light);
+  top: -20px; left: -20px;
+  animation: pulseMove 85s infinite alternate;
+}
+.dual-pulse::after {
+  background: var(--widget-accent-deep);
+  bottom: -20px; right: -20px;
+  animation: pulseMove 5s infinite alternate-reverse;
 }
 
+/* Animations */
+@keyframes drift {
+  from { transform: scale(1) translate(0,0); }
+  to { transform: scale(1.2) translate(-5%, -5%); }
+}
 
-.habit-dot.completed {
-  background-color: var(--color-brand); /* Green for success/completion */
+@keyframes pulseMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
 }
 
 /* --- Responsive Spans (Desktop) --- */
+.col-2 { grid-column: span 2; }
 .col-3 { grid-column: span 3; }
 .col-4 { grid-column: span 4; }
 .col-6 { grid-column: span 6; }
@@ -107,6 +91,7 @@ textarea {
 .row-1 { grid-row: span 1; }
 .row-2 { grid-row: span 2; }
 .row-3 { grid-row: span 3; }
+.row-4 { grid-row: span 4; }
 
 /* --- Tablets (6 Columns) --- */
 @media (max-width: 1100px) {
@@ -115,11 +100,28 @@ textarea {
   .col-12 { grid-column: span 6; } /* Full width items */
 }
 
-/* --- Mobile (Stack Everything) --- */
+/* --- Mobile (Stack Everything while preserving height) --- */
 @media (max-width: 640px) {
   .bento-grid-12 { 
-    display: flex;
-    flex-direction: column;
+    /* Switch to 1 column instead of flex */
+    display: grid;
+    grid-template-columns: 1fr; 
+    
+    /* Keep the same row height logic from desktop */
+    grid-auto-rows: 140px; 
+    gap: 1rem;
   }
-  .bento-item { min-height: 150px; }
+
+  /* Force all items to take full width of the 1 column */
+  .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-12 { 
+    grid-column: span 1; 
+  }
+
+  /* Crucially: We do NOT override .row-x classes. 
+     A .row-2 item will now stay 280px tall (plus gap), 
+     maintaining that "rich" feel even on a phone.
+  */
+  .bento-item {
+    min-height: auto; /* Remove the hardcoded min-height so spans take over */
+  }
 }

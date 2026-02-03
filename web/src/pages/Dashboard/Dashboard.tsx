@@ -1,103 +1,89 @@
-import { 
-  MagnifyingGlassIcon, 
-  SmileyIcon,
-  UserCircleIcon, 
-  SparkleIcon, 
-  CalendarIcon, 
-  CheckCircleIcon, 
-  RepeatIcon, 
-  BookOpenIcon, 
-  WalletIcon, 
-  TargetIcon, 
-  DropIcon, 
-  PushPinIcon 
-} from "@phosphor-icons/react";
+import Profile from './Components/Profile/Profile';
 import './Dashboard.css';
 
-interface BentoBox {
-  id: string;
-  title: string;
-  className: string;
-  icon: React.ReactNode; // New field for icons
-  content: React.ReactNode;
-}
+// Repeat this pattern for Mood, Journal, etc.
+const WIDGET_DATA = [
+  { 
+    id: 'profile', 
+    title: '', 
+    grid: 'col-3 row-2', 
+    color: '#fab1b9', 
+    styleType: 'fluid-waves',
+    Component: Profile 
+  },
+  { 
+    id: 'profile2', 
+    title: '2', 
+    grid: 'col-2 row-2', 
+    color: '#3f1cda', 
+    styleType: 'fluid-waves',
+    Component: Profile 
+  },  
+  { 
+    id: 'profile3', 
+    title: '3', 
+    grid: 'col-3 row-4', 
+    color: '#d19b08', 
+    styleType: 'fluid-waves',
+    Component: Profile 
+  },
+  { 
+    id: 'profile4', 
+    title: '4', 
+    grid: 'col-4 row-2', 
+    color: '#3cbd15', 
+    styleType: 'fluid-waves',
+    Component: Profile 
+  },
+  { 
+    id: 'profile5', 
+    title: '5', 
+    grid: 'col-3 row-2', 
+    color: '#dd1bd3', 
+    styleType: 'dual-pulse',
+    Component: Profile 
+  },
+  { 
+    id: 'profile6', 
+    title: '6', 
+    grid: 'col-2 row-2', 
+    color: '#b61024', 
+    styleType: 'fluid-waves',
+    Component: Profile 
+  },
+  { 
+    id: 'profile7', 
+    title: '7', 
+    grid: 'col-4 row-2', 
+    color: '#cf7601', 
+    styleType: 'dual-pulse',
+    Component: Profile 
+  },
+];
 
 export default function Dashboard() {
-  const bentoItems: BentoBox[] = [
-    { 
-      id: 'search', title: 'Search', className: 'col-9 row-1', 
-      icon: <MagnifyingGlassIcon size={20} weight="bold" />, 
-      content: <input type="text" placeholder="Type to search..." className="search-input" /> 
-    },    
-    { 
-      id: 'mood', title: 'Mood', className: 'col-3 row-1', 
-      icon: <SmileyIcon size={20} weight="bold" />, 
-      content: <div className="mood-icons">☀️ ☁️ 🌧️</div> 
-    },
-    { 
-      id: 'profile', title: 'Profile', className: 'col-3 row-2', 
-      icon: <UserCircleIcon size={20} weight="bold" />, 
-      content: <div className="avatar-circle">JD</div> 
-    },
-    { 
-      id: 'quote', title: 'AI Quote', className: 'col-6 row-2', 
-      icon: <SparkleIcon size={20} weight="bold" color="#eab308" />, 
-      content: <p className="italic">"The habit of persistence is victory."</p> 
-    },
-    { 
-      id: 'event', title: 'Event', className: 'col-3 row-2', 
-      icon: <CalendarIcon size={20} weight="bold" />, 
-      content: <div className="event-tag">Meeting 2PM</div> 
-    },
-    { 
-      id: 'tasks', title: 'Tasks', className: 'col-4 row-3', 
-      icon: <CheckCircleIcon size={20} weight="bold" />, 
-      content: <ul><li>Read 10 mins</li><li>Push code</li></ul> 
-    },
-    { 
-      id: 'habits', title: 'Habits', className: 'col-4 row-3', 
-      icon: <RepeatIcon size={20} weight="bold" />, 
-      content: <div className="habit-grid">Habit Tracker</div> 
-    },
-    { 
-      id: 'journal', title: 'Journal', className: 'col-4 row-3', 
-      icon: <BookOpenIcon size={20} weight="bold" />, 
-      content: <textarea placeholder="How was today?" /> 
-    },
-    { 
-      id: 'expenses', title: 'Finance', className: 'col-6 row-2', 
-      icon: <WalletIcon size={20} weight="bold" />, 
-      content: <div className="chart-placeholder">Expense Graph</div> 
-    },
-    { 
-      id: 'goals', title: 'Goals', className: 'col-3 row-2', 
-      icon: <TargetIcon size={20} weight="bold" />, 
-      content: <p>Weekly: 80%</p> 
-    },
-    { 
-      id: 'period', title: 'Cycle', className: 'col-3 row-2', 
-      icon: <DropIcon size={20} weight="bold" color="#ef4444" />, 
-      content: <p>Day 14</p> 
-    },
-    { 
-      id: 'notes', title: 'Sticky', className: 'col-12 row-1', 
-      icon: <PushPinIcon size={20} weight="bold" />, 
-      content: <p>Buy milk, fix the bento bug.</p> 
-    },
-  ];
-
   return (
     <main className="dashboard-container">
       <div className="bento-grid-12">
-        {bentoItems.map((item) => (
-          <section key={item.id} className={`bento-item ${item.className}`}>
-            <header className="item-header">
-              <span className="header-title">
-                {item.icon}
-                {item.title}
-              </span>
+        {WIDGET_DATA.map((item) => (
+          <section 
+            key={item.id} 
+            className={`bento-item ${item.grid}`}
+            style={{ 
+              '--widget-accent': item.color,
+              '--widget-accent-deep': `color-mix(in srgb, ${item.color}, black 30%)`,
+              '--widget-accent-light': `color-mix(in srgb, ${item.color}, white 30%)`
+            } as React.CSSProperties}
+          >
+            {/* Pass the styleType here */}
+            <div className={`item-gradient-overlay ${item.styleType}`} />
+            
+            <header className="item-header" style={{ color: item.color }}>
+              {item.title}
             </header>
-            <div className="item-content">{item.content}</div>
+            <div className="item-content">
+              <item.Component />
+            </div>
           </section>
         ))}
       </div>
