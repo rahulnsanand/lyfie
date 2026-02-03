@@ -19,6 +19,7 @@
   --color-text-main: #141414;
   --color-text-hyperlink: #62a145;
   --color-bg-solid-dialog: #ffffff;
+  --bg-navbar-transparent: rgba(255, 255, 255, 0.6);
 }
 
 /* 2. Handle Dark Mode Overrides */
@@ -30,6 +31,7 @@
   --color-text-main: #f5f5f5;
   --color-text-hyperlink: #22c55e;
   --color-bg-solid-dialog: #101010;
+  --bg-navbar-transparent: rgba(56, 56, 56, 0.6);
 }
 
 /* 3. Global Base Styles (Replaces @layer base) */
