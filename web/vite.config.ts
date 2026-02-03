@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: './',
   plugins: [react()],
   server: {
     port: 5173, // Vite port
@@ -12,7 +11,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false, // Allows self-signed SSL certificates in development
         configure: (proxy, _options) => {
-          proxy.on('error', (err: Error, _req: any, _res: any) => {
+          (proxy as any).on('error', (err: Error, _req: any, _res: any) => {
             console.log('proxy error', err);
           });
         },

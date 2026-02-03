@@ -107,7 +107,7 @@ public class Program
 
         builder.Services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "CMS API", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Lyfie API", Version = "v1" });
 
             const string schemeId = "Bearer";
 
