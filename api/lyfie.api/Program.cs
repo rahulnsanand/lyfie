@@ -98,6 +98,8 @@ public class Program
             scope.ServiceProvider.GetRequiredService<LyfieDbContext>().Database.Migrate();
         }
 
+        app.UseDefaultFiles(); // Looks for index.html
+        app.UseStaticFiles();  // Serves the JS/CSS from wwwroot
         app.UseRouting();
         app.UseCors("LyfieCorsPolicy");
         app.UseAuthentication();
