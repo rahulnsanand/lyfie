@@ -74,7 +74,7 @@ export const authService = {
 
   async logout() {
     const response = await api.post(`${BASE_URL}/logout`);
-    await db.session.clear();
+    await db.delete();
     return response.data;
   }
 };  
