@@ -15,7 +15,7 @@ export default function Profile({ onOpenSettings }: ProfileProps) {
         <div className="profile-meta">
           <h4 className="profile-name">Rahul Anand</h4>
           <span className="profile-email">admin@burgerlife.in</span>
-        </div>
+        </div>       
       </div>
 
       <div className="profile-stats-grid">
@@ -28,7 +28,7 @@ export default function Profile({ onOpenSettings }: ProfileProps) {
           <span className="stat-value">IST</span>
         </div>
         <div className="stat-box">
-          <span className="stat-label">Measurement</span>
+          <span className="stat-label">Unit</span>
           <span className="stat-value">Metric</span>
         </div>
         <div className="stat-box">
@@ -39,7 +39,7 @@ export default function Profile({ onOpenSettings }: ProfileProps) {
 
       <footer className="profile-card-footer">
         <div className="dynamic-text-status">
-          <span>last active in a day ago</span>
+          <span>lyfie version 1.2.1 status [online]</span>
         </div>
       </footer>
     </div>

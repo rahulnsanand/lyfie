@@ -72,7 +72,7 @@ public class AuthController : ControllerBase
         {
             message = "Registered successfully",
             token = token, // Postman/Android will use this
-            user = new { user.Email, user.Name } // Good for offline "Lite" profile
+            user = new { user.Id, user.Email, user.Name } // Good for offline "Lite" profile
         });
     }
 
@@ -97,7 +97,7 @@ public class AuthController : ControllerBase
         {
             message = "Logged in successfully",
             token = token, // Postman/Android will use this
-            user = new { user.Email, user.Name } // Good for offline "Lite" profile
+            user = new { user.Id, user.Email, user.Name } // Good for offline "Lite" profile
         });
     }
 
