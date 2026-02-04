@@ -90,11 +90,9 @@ export default function Navbar({ isLoggedIn, theme, toggleTheme, onLogout }: Nav
 
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />    
 
-          <div className="nav-links">
-            <Link to="/settings" className="nav-icon-link" title="Settings">
-              <GearIcon size={24} weight="bold" />
-            </Link>
-          </div>
+          <Link to="/settings" className="nav-icon-link" title="Settings">
+            <GearIcon size={24} weight="bold" />
+          </Link>
         </div>
       </nav>
 

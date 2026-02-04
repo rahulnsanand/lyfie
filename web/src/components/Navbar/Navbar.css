@@ -61,7 +61,7 @@
 .navbar.scrolled .navbar-logo { height: 30px; }
 .navbar.scrolled .logo-text { font-size: 1.3rem; }
 
-.navbar-actions, .nav-links {
+.navbar-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -74,13 +74,11 @@
   padding: 8px;
   border-radius: 10px;
   color: var(--color-text-main);
-  transition: 0.2s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .search-trigger-btn:hover, .nav-icon-link:hover {
   color: var(--color-brand-primary);
-  background: rgba(128, 128, 128, 0.1);
-  transform: translateY(-1px);
 }
 
 /* --- Search Modal --- */
