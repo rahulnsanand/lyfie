@@ -8,6 +8,7 @@ import Navbar from './components/Navbar/Navbar';
 import { authService } from './services/authService';
 import AnimatedPage from './pages/AnimatedPage';
 import './App.css';
+import { db } from './db/database';
 
 type Theme = 'light' | 'dark';
 
@@ -33,14 +34,31 @@ export default function App() {
 
   const checkAuthStatus = async () => {
     try {
-      const data = await authService.checkSession();
+      await authService.checkSession();
       setIsAuthenticated(true);
     } catch (error: any) {
-      // If it's a 401, we don't log it as an "error" because it's expected
-      if (error.response?.status !== 401) {
-        console.error("Authentication check failed", error);
+      const status = error.response?.status;
+
+      // IF SERVER IS DOWN (No response) OR CRASHED (500 range)
+      if (!error.response || (status >= 500 && status <= 599)) {
+        const localSession = await authService.getLocalSession();
+        
+        if (localSession) {
+          console.warn("Server error/offline. Using local session.");
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } 
+      // IF COOKIE IS EXPIRED (401)
+      else if (status === 401) {
+        console.error("Session expired on server.");
+        await db.session.clear(); // Wipe Dexie so we don't try again
+        setIsAuthenticated(false);
+      } 
+      else {
+        setIsAuthenticated(false);
       }
-      setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
     }
