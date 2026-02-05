@@ -26,6 +26,11 @@ export default tseslint.config(
       // Add custom "Show off" rules here
       '@typescript-eslint/no-explicit-any': 'warn', // Discourage 'any'
       '@typescript-eslint/no-unused-vars': ['error'], // Keep code clean
+      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'], // Does this file contain <div> fragments? YES -> .tsx NO -> .ts
+      'react/jsx-filename-extension': [
+        'error',
+        { extensions: ['.tsx'] }
+      ],
     },
   },
 );

@@ -1,6 +1,6 @@
-import api from './api';
-import { db } from "../db/database";
-import { UserSession } from '../db/interfaces/UserSession';
+import api from '@shared/services/api';
+import { db } from "@shared/persistence/database";
+import { UserSession } from '@shared/persistence/interfaces/UserSession';
 
 const BASE_URL = "/auth"; // The 'api' instance already has the base URL prefix
 

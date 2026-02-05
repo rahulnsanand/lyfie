@@ -2,18 +2,18 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // Hooks & Services
-import { useAuthManager } from './hooks/useAuthManager';
-import { useTheme } from './hooks/useTheme';
+import { useAuthManager } from '@shared/hooks/useAuthManager';
+import { useTheme } from '@shared/hooks/useTheme';
 
 // Components
-import { PublicRoute, ProtectedRoute } from './components/AuthGuards';
-import Navbar from './components/Navbar/Navbar';
-import AnimatedPage from './pages/AnimatedPage';
+import { PublicRoute, ProtectedRoute } from '@shared/guards/AuthGuards';
+import Navbar from '@shared/components/Navbar/Navbar';
+import AnimatedPage from '@shared/components/AnimatedPage';
 
 // Pages
-import Authentication from './pages/Authentication/Authentication';
-import Dashboard from './pages/Dashboard/Dashboard';
-import Settings from './pages/Settings/Settings';
+import Login from '@features/auth/pages/Login';
+import Dashboard from '@features/dashboard/pages/Dashboard';
+import Settings from '@features/settings/pages/Settings';
 
 import './App.css';
 
@@ -46,7 +46,7 @@ export default function App() {
             <Route path="/auth" element={
               <AnimatedPage>
                 <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Authentication onLogin={login} />
+                  <Login onLogin={login} />
                 </PublicRoute>
               </AnimatedPage>
             } />

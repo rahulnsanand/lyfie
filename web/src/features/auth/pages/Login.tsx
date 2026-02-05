@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import React from 'react';
-import { authService } from '../../services/authService';
+import { authService } from '@features/auth/services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import logo from '../../assets/logo.svg';
-import './Authentication.css';
+import logo from '@assets/logo.svg';
+import './Login.css';
 import toast, { Toaster } from 'react-hot-toast';
 import { Button, Field, Input, Transition } from '@headlessui/react';
 
-interface AuthenticationProps {
+interface LoginProps {
   onLogin: (status: boolean) => void;
 }
 
-export default function Authentication({ onLogin }: AuthenticationProps) {
+export default function Login({ onLogin }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');  
   const [confirm_password, setConfirmPassword] = useState('');

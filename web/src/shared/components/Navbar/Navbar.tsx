@@ -1,9 +1,9 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { HouseIcon, MagnifyingGlassIcon, SignOutIcon, XIcon, GearIcon } from "@phosphor-icons/react";
-import ThemeToggle from '../ThemeToggle/ThemeToggle';
+import ThemeToggle from '@shared/components/ThemeToggle/ThemeToggle';
 import { useTranslation } from 'react-i18next';
-import logo from '../../assets/logo.svg';
+import logo from '@assets/logo.svg';
 import './Navbar.css';
 
 interface NavbarProps {

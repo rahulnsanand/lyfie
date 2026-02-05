@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Profile from './Components/Profile/Profile';
-import Mood from './Components/Mood/Mood';
-import ProfileSettings from './Components/Profile/ProfileSettings';
+import Profile from '@features/dashboard/components/Profile/Profile';
+import Mood from '@features/dashboard/components/Mood/Mood';
+import ProfileSettings from '@features/dashboard/components/Profile/ProfileSettings';
 import './Dashboard.css';
 
 interface WidgetItem {

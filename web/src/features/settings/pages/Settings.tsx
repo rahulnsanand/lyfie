@@ -1,8 +1,7 @@
-// Settings.tsx
 import { Routes, Route, Navigate, NavLink } from 'react-router-dom';
-import ProfileSettings from './Profile/ProfileSettings';
-import UserSettings from './User/UserSettings';
-import AdminSettings from './Admin/AdminSettings';
+import ProfileSettings from '@features/settings/components/Profile/ProfileSettings';
+import UserSettings from '@features/settings/components/User/UserSettings';
+import AdminSettings from '@features/settings/components/Admin/AdminSettings';
 import './Settings.css';
 
 export default function Settings() {

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { authService } from '../services/authService';
-import { db } from '../db/database';
+import { authService } from '@features/auth/services/authService';
+import { db } from '@shared/persistence/database';
 
 export function useAuthManager() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

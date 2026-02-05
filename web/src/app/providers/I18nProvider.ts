@@ -3,8 +3,8 @@ import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // 1. Import JSON files
-import en from './locales/en.json';
-import es from './locales/es.json';
+import en from '@locales/en.json';
+import es from '@locales/es.json';
 
 // 2. Define a TypeScript constant for your default namespace
 export const defaultNS = 'translation';
