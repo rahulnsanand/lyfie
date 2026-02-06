@@ -29,7 +29,8 @@
   gap: 0.75rem;
   padding: 0.6rem 0.75rem;
   border-radius: 0.75rem;
-  background: rgba(255,255,255,0.04);
+  background: var(--bg-tinted-transparent);  
+  color: var(--color-text-main);
 }
 
 .value-row.editable {
@@ -38,7 +39,7 @@
 }
 
 .value-row.editable:hover {
-  background: rgba(255,255,255,0.08);
+  background: var(--bg-tinted-transparent);  
 }
 
 .value-row.multiline {
@@ -70,11 +71,10 @@
 
 input,
 textarea {
-  background: rgba(255,255,255,0.06);
+  background: var(--bg-tinted-transparent); 
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 0.75rem;
   padding: 0.6rem 0.75rem;
-  color: inherit;
 }
 
 .bio-footer {
@@ -89,9 +89,13 @@ textarea {
   font-size: 0.7rem;
   padding: 0.3rem 0.6rem;
   border-radius: 0.5rem;
-  background: rgba(255,255,255,0.15);
+  background: var(--color-bg-dialog); 
   border: none;
   cursor: pointer;
+}
+
+.save-btn:hover {
+  background: var(--color-bg-dialog-hover);
 }
 
 .profile-settings-content textarea {

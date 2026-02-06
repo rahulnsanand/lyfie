@@ -54,7 +54,7 @@
 .logo-text {
   font-weight: 700;
   font-size: 1.75rem;
-  color: var(--color-brand-primary);
+  color: var(--color-brand-pink);
   transition: font-size var(--nav-transition);
 }
 
@@ -78,7 +78,7 @@
 }
 
 .search-trigger-btn:hover, .nav-icon-link:hover {
-  color: var(--color-brand-primary);
+  color: var(--color-brand-pink);
 }
 
 .search-trigger-btn,

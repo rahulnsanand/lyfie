@@ -16,7 +16,7 @@
   margin: 0 3rem;
   border-radius: 1rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);  
-  background-color: rgba(255, 255, 255, 0.6); 
+  background-color: var(--color-bg-dialog);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   transform: translateY(0);
@@ -24,11 +24,6 @@
   
 }
 
-
-/* Logic for Dark Mode transparency */
-:root[data-theme='dark'] .auth-form {
-  background-color: rgba(32, 32, 32, 0.6);
-}
 
 .auth-header {
   text-align: center;
@@ -60,13 +55,13 @@
 }
 
 .auth-input-field:focus {
-  border-color: #22c55e; /* green-500 */
+  border-color: var(--color-brand-green);
   box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.5);
 }
 
 .auth-submit-btn {
   width: 100%;
-  background-color: var(--color-brand);
+  background-color: var(--color-brand-green);
   color: white;
   padding: 0.75rem;
   border-radius: 0.5rem;
@@ -79,7 +74,7 @@
 }
 
 .auth-submit-btn:hover {
-  background-color: var(--color-brand-deep); /* green-700 */
+  background-color: var(--color-brand-green-hover);
 }
 
 .auth-footer-text {
@@ -90,7 +85,7 @@
 }
 
 .auth-link {
-  color: var(--color-brand);
+  color: var(--color-brand-green);
   font-weight: 600;
   text-decoration: none;
 }
@@ -100,11 +95,11 @@
 }
 
 .register-sidebar {
-  flex: 0 0 66.666%; /* basis-2/3 */
+  flex: 0 0 66.666%; 
 }
 
 .error-message {
-  color: #ef4444; /* red-500 */
+  color: var(--color-danger);
   background-color: rgba(239, 68, 68, 0.1);
   padding: 0.5rem;
   border-radius: 4px;
@@ -117,7 +112,7 @@
 /* Container for the hidden field */
 .confirm-password-wrapper {
     display: grid;
-    grid-template-rows: 0fr; /* Collapsed state */
+    grid-template-rows: 0fr; 
     transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease-out;
     opacity: 0;
     overflow: hidden;

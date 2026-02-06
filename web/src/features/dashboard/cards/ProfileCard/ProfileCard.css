@@ -4,6 +4,7 @@
   height: 100%;
   padding: 0.5rem;
   color: white;
+  color: var(--color-text-main);
 }
 
 /* --- Top --- */
@@ -23,20 +24,17 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .profile-name {
   margin: 0;
   font-size: 1.25rem;
-  color: var(--color-text-main);
 }
 
 .profile-email {
   font-size: 0.81rem;
   opacity: 0.6;
   display: block;
-  color: var(--color-text-main);
 }
 
 /* --- Stats --- */
@@ -48,7 +46,6 @@
 }
 
 .stat-box {
-  background: rgba(255, 255, 255, 0.05);
   padding: 8px 12px;
   border-radius: 10px;
 }
@@ -88,7 +85,7 @@
 }
 
 .version-text.outdated {
-  color: #f59e0b; /* amber */
+  color: var(--color-warning); /* amber */
   opacity: 1;
 }
 
@@ -97,7 +94,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #f59e0b;
+  background: var(--color-warning);
 }
 
 /* Info icon */
@@ -116,7 +113,7 @@
   left: 0;
   width: 240px;
   padding: 12px;
-  background: rgba(20, 20, 20, 0.95);
+  background: var(--color-bg-main);
   border-radius: 12px;
   font-size: 0.7rem;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);

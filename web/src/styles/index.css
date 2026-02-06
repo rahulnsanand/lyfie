@@ -10,13 +10,16 @@ body,
 /* 1. Define Variables in :root */
 :root {
   /* Brand & Fonts */
-  --color-brand-primary: #fab1b9;
-  --color-brand: #62a145;
-  --color-brand-deep: #44752d;
+  --color-brand-pink: #fab1b9;
+  --color-brand-green: #62a145;
+
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
 
   /* Derived Tints for Hovers/Backgrounds */
-  --color-pink-soft: rgba(250, 177, 185, 0.15);
-  --color-green-soft: rgba(98, 161, 69, 0.1);
+  --color-brand-pink-hover: rgba(250, 177, 185, 0.15);
+  --color-brand-green-hover: rgb(44, 94, 21);
+  --color-bg-dialog-hover: #e7e7e7;
 
   --font-sans: "Comfortaa", system-ui, sans-serif;
   --font-display: "Comfortaa", cursive;
@@ -24,21 +27,25 @@ body,
   /* Semantic Light Mode Colors */
   --color-bg-main: #fafafa;
   --color-text-main: #141414;
+  --color-text-muted: #777777;
   --color-text-hyperlink: #62a145;
-  --color-bg-solid-dialog: #ffffff;
+  --color-bg-dialog: #f8f8f8;
   --bg-navbar-transparent: rgba(255, 255, 255, 0.6);
+  --bg-tinted-transparent: rgba(0, 0, 0, 0.103);
 }
 
 /* 2. Handle Dark Mode Overrides */
 :root[data-theme='dark'] {
-  --color-brand-primary: #fab1b9;
-  --color-brand: #62a145;
-  --color-brand-deep: #43702e;
   --color-bg-main: #000000;
   --color-text-main: #f5f5f5;
+  --color-text-muted: #777777;
   --color-text-hyperlink: #22c55e;
-  --color-bg-solid-dialog: #101010;
+  --color-bg-dialog: #1f1f1f;
   --bg-navbar-transparent: rgba(56, 56, 56, 0.6);
+  --bg-tinted-transparent: rgba(0, 0, 0, 0.233);
+  
+  /* Derived Tints for Hovers/Backgrounds */
+  --color-bg-dialog-hover: #575757;
 }
 
 /* 3. Global Base Styles (Replaces @layer base) */

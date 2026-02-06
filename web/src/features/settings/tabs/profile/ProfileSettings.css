@@ -3,6 +3,7 @@
   flex-direction: row;  
   gap: 3rem;
   align-items: flex-start;
+  color: var(--color-text-main);
 } 
 
 .profile-settings-content { 

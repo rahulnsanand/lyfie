@@ -17,10 +17,15 @@
   border-radius: 8px 8px 0 0;
   font-weight: 500;
   text-decoration: none;
-  color: #555;
-  background: #f3f4f6;
+  color: var(--color-text-main);
+  background: var(--color-bg-dialog);
   transition: background 0.2s ease, color 0.2s ease;
 }
+/* Hover (optional) */
+.tab:hover {
+  background: var(--color-bg-dialog-hover);
+}
+
 
 /* Profile */
 .tab.profile.active {
@@ -38,11 +43,6 @@
 .tab.admin.active {
   background: #fef2f2;
   color: #991b1b;
-}
-
-/* Hover (optional) */
-.tab:hover {
-  filter: brightness(0.97);
 }
 
 .settings-content {
