@@ -1,11 +1,18 @@
-.profile-settings-content {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-
-  padding: 3rem 2.5rem;
-
-  display: flex;
-  flex-direction: column;
+.profile-user-content { 
+  display: flex; 
+  flex-direction: row;  
   gap: 3rem;
+  align-items: flex-start;
+} 
+
+.profile-settings-content { 
+  width: 100%; 
+  padding: 3rem 2.5rem; 
+} 
+
+/* Avatar column controls centering, not flex */
+.avatar-column {  
+  min-height: 100%;
+  padding-top: 2rem; /* visual centering baseline */
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }

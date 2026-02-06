@@ -21,7 +21,7 @@ export default function LocaleSection() {
   }).format(now);
 
   return (
-    <div className="locale-settings">
+    <div className="locale-settings">      
       <div className="settings-group">
         <label>Language / Locale</label>
         <select value={locale} onChange={(e) => setLocale(e.target.value)}>

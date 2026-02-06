@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { HouseIcon, MagnifyingGlassIcon, SignOutIcon, XIcon, GearIcon } from "@phosphor-icons/react";
+import { MagnifyingGlassIcon, GearIcon } from "@phosphor-icons/react";
 import ThemeToggle from '@shared/components/ThemeToggle/ThemeToggle';
 import { useTranslation } from 'react-i18next';
 import logo from '@assets/logo.svg';
@@ -10,10 +10,9 @@ interface NavbarProps {
   isLoggedIn: boolean;
   theme: string;
   toggleTheme: () => void;
-  onLogout: () => void;
 }
 
-export default function Navbar({ isLoggedIn, theme, toggleTheme, onLogout }: NavbarProps) {
+export default function Navbar({ isLoggedIn, theme, toggleTheme }: NavbarProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
@@ -101,9 +100,6 @@ export default function Navbar({ isLoggedIn, theme, toggleTheme, onLogout }: Nav
             <Link to="/settings/profile" className="nav-icon-link" title="Settings">
               <GearIcon size={24} weight="bold" />
             </Link>
-            <button onClick={onLogout} className="logout-icon-btn" title="Logout">
-              <SignOutIcon size={24} weight="bold" />
-            </button>
           </div>
         </div>
       </nav>

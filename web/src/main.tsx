@@ -6,6 +6,7 @@ import '@styles/index.css'
 import App from '@app/App'
 import '@app/providers/I18nProvider';
 import { db } from '@shared/persistence/database';
+import { AuthProvider } from '@shared/hooks/AuthContext';
 
 registerSW({ immediate: true });
 
@@ -19,7 +20,9 @@ db.open().catch((err) => {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

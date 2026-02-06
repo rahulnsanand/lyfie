@@ -73,8 +73,11 @@ export const authService = {
   },
 
   async logout() {
-    const response = await api.post(`${BASE_URL}/logout`);
-    await db.delete();
-    return response.data;
+    try {
+      await api.post(`${BASE_URL}/logout`);
+    } finally {
+      // Clear ONLY auth-related tables
+      await db.session.clear();
+    }
   }
 };  

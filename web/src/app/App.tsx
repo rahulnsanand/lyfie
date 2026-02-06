@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 // Hooks & Services
-import { useAuthManager } from '@shared/hooks/useAuthManager';
+import { useAuth } from '@shared/hooks/AuthContext';
 import { useTheme } from '@shared/hooks/useTheme';
 
 // Components
@@ -20,7 +20,7 @@ import { ScrollToTop } from '@shared/routes/ScrollToTop';
 export default function App() {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { isAuthenticated, isLoading, login, logout } = useAuthManager();
+  const { isAuthenticated, isLoading, login } = useAuth();
 
   if (isLoading) {
     return (
@@ -37,7 +37,6 @@ export default function App() {
         isLoggedIn={isAuthenticated}
         theme={theme}
         toggleTheme={toggleTheme}
-        onLogout={logout}
       />
       <main className="app-content">
         <ScrollToTop />

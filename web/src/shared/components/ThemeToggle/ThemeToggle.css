@@ -21,3 +21,31 @@
   transition: color 0.3s ease;
 }
 
+
+/* 4. Animation Classes */
+.sun-moon-container {
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-theme='dark'] .sun-moon-container {
+  transform: rotate(40deg);
+}
+
+.sun-ray {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform-origin: center;
+}
+
+:root[data-theme='dark'] .sun-ray {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.moon-mask {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root[data-theme='dark'] .moon-mask {
+  cx: 25; 
+}

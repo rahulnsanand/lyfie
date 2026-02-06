@@ -81,6 +81,15 @@
   color: var(--color-brand-primary);
 }
 
+.search-trigger-btn,
+.nav-icon-link,
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 /* --- Search Modal --- */
 .search-modal-overlay {
   position: fixed;
@@ -143,3 +152,4 @@
   .search-modal-overlay { padding-top: 10%; padding-left: 2%; padding-right: 2%; }
   .search-modal-content { width: 100%; border-radius: 0; }
 }
+

@@ -7,7 +7,7 @@ type Props = {
 };
 
 const DEFAULT_AVATAR =
-  'https://ui-avatars.com/api/?name=User&background=random';
+  'https://avatars.githubusercontent.com/u/41159815?v=4';
 
 export default function AvatarSection({ avatarUrl }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
