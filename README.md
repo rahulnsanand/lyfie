@@ -5,6 +5,8 @@
 
 [**lyfie.app**](https://lyfie.app) | [**contact**](mailto:lyfieapp@gmail.com)
 
+***UNDER ACTIVE DEVELOPMENT***
+
 🌿 the vision
 -------------
 

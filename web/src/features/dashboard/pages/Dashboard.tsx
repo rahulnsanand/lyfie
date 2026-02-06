@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import Profile from '@features/dashboard/components/Profile/Profile';
-import Mood from '@features/dashboard/components/Mood/Mood';
-import ProfileSettings from '@features/dashboard/components/Profile/ProfileSettings';
+import ProfileCard from '@features/dashboard/cards/ProfileCard/ProfileCard';
+import Mood from '@features/dashboard/cards/Mood/Mood';
 import './Dashboard.css';
 
 interface WidgetItem {
@@ -10,7 +9,6 @@ interface WidgetItem {
   grid: string;
   color: string;
   styleType: string;
-  // This tells TS the component accepts our custom props
   Component: React.ComponentType<{ onOpenSettings: () => void }>;
 }
 
@@ -22,7 +20,7 @@ const WIDGET_DATA: WidgetItem[] = [
     grid: 'col-3 row-2', 
     color: '#fab1b9', 
     styleType: 'fluid-waves',
-    Component: Profile 
+    Component: ProfileCard 
   },
   { 
     id: 'profile2', 
@@ -75,8 +73,7 @@ const WIDGET_DATA: WidgetItem[] = [
 ];
 
 export default function Dashboard() {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  
+ 
   return (
     <main className="dashboard-container">
       <div className="bento-grid-12">
@@ -89,8 +86,6 @@ export default function Dashboard() {
               '--widget-accent-deep': `color-mix(in srgb, ${item.color}, black 30%)`,
               '--widget-accent-light': `color-mix(in srgb, ${item.color}, white 30%)`
             } as React.CSSProperties}
-            // Trigger settings on card click
-            onClick={() => item.id === 'profile' && setIsSettingsOpen(true)}
           >
             <div className={`item-gradient-overlay ${item.styleType}`} />
             
@@ -98,17 +93,12 @@ export default function Dashboard() {
               {item.title}
             </header>
             <div className="item-content">
-              {/* If it's the profile, we can pass the click handler down */}
-              <item.Component onOpenSettings={() => setIsSettingsOpen(true)} />
+              <item.Component/>
             </div>
           </section>
         ))}
       </div>
 
-      {/* Render the popup outside the grid loop to prevent z-index issues */}
-      {isSettingsOpen && (
-        <ProfileSettings onClose={() => setIsSettingsOpen(false)} />
-      )}
     </main>
   );
 }
