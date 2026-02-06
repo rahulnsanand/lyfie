@@ -86,20 +86,23 @@ export default function Navbar({ isLoggedIn, theme, toggleTheme }: NavbarProps) 
         </div>
 
         <div className="navbar-actions">
-          <button 
-            className="search-trigger-btn" 
-            onClick={() => setIsSearchOpen(true)}
-            title="Search (Ctrl+K)"
-          >
-            <MagnifyingGlassIcon size={24} weight="bold" />
-          </button>
+          <div className="tooltip-container">
+            <button 
+              className="search-trigger-btn" 
+              onClick={() => setIsSearchOpen(true)}
+            >
+              <MagnifyingGlassIcon size={24} weight="bold" />
+            </button>
+            <span className="tooltip-text">Type anywhere to search or (Ctrl+K)</span>
+          </div>          
 
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />    
-
-          <div className="nav-links">
-            <Link to="/settings/profile" className="nav-icon-link" title="Settings">
+          
+          <div className="tooltip-container">
+            <Link to="/settings/profile" className="nav-icon-link">
               <GearIcon size={24} weight="bold" />
             </Link>
+            <span className="tooltip-text">Settings</span>
           </div>
         </div>
       </nav>

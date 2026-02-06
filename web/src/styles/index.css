@@ -28,6 +28,7 @@ body,
   --color-bg-main: #fafafa;
   --color-text-main: #141414;
   --color-text-muted: #777777;
+  --color-muted: rgba(0, 0, 0, 0.103);
   --color-text-hyperlink: #62a145;
   --color-bg-dialog: #f8f8f8;
   --bg-navbar-transparent: rgba(255, 255, 255, 0.6);
@@ -39,6 +40,7 @@ body,
   --color-bg-main: #000000;
   --color-text-main: #f5f5f5;
   --color-text-muted: #777777;
+  --color-muted: rgba(240, 240, 240, 0.158);
   --color-text-hyperlink: #22c55e;
   --color-bg-dialog: #1f1f1f;
   --bg-navbar-transparent: rgba(56, 56, 56, 0.6);
@@ -70,8 +72,8 @@ body {
   visibility: hidden;
   position: absolute;
   transform: translateX(-50%);  
-  background-color: var(--color-tooltip-bg, #333);
-  color: #fff;
+  background-color: var(--color-muted);
+  color: var(--color-text-main);
   padding: 4px 10px;
   border-radius: 6px;
   white-space: nowrap;
