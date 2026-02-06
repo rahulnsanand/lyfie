@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 
 // Hooks & Services
 import { useAuthManager } from '@shared/hooks/useAuthManager';
@@ -8,14 +7,15 @@ import { useTheme } from '@shared/hooks/useTheme';
 // Components
 import { PublicRoute, ProtectedRoute } from '@shared/guards/AuthGuards';
 import Navbar from '@shared/components/Navbar/Navbar';
-import AnimatedPage from '@shared/components/AnimatedPage';
+import { AnimatedRoutes } from '@shared/routes/AnimatedRoute';
 
 // Pages
 import Login from '@features/auth/pages/Login';
 import Dashboard from '@features/dashboard/pages/Dashboard';
-import Settings from '@features/settings/pages/Settings';
+import Settings from '@features/settings/Settings';
 
 import './App.css';
+import { ScrollToTop } from '@shared/routes/ScrollToTop';
 
 export default function App() {
   const location = useLocation();
@@ -32,23 +32,22 @@ export default function App() {
   }
 
   return (
-    <>
-      <Navbar 
-        isLoggedIn={isAuthenticated} 
-        theme={theme} 
-        toggleTheme={toggleTheme} 
-        onLogout={logout} 
+    <div className="app-shell">
+      <Navbar
+        isLoggedIn={isAuthenticated}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onLogout={logout}
       />
       <main className="app-content">
-        <AnimatePresence mode="wait">
+        <ScrollToTop />
+        <AnimatedRoutes>
           <Routes location={location} key={location.pathname}>
             {/* Public Routes */}
             <Route path="/auth" element={
-              <AnimatedPage>
-                <PublicRoute isAuthenticated={isAuthenticated}>
-                  <Login onLogin={login} />
-                </PublicRoute>
-              </AnimatedPage>
+              <PublicRoute isAuthenticated={isAuthenticated}>
+                <Login onLogin={login} />
+              </PublicRoute>
             } />
 
             {/* Protected Routes */}
@@ -59,8 +58,8 @@ export default function App() {
             <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth"} />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-        </AnimatePresence>
+        </AnimatedRoutes>
       </main>
-    </>
+    </div>
   );
 }

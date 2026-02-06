@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
 
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
 /* 1. Define Variables in :root */
 :root {
   /* Brand & Fonts */
@@ -47,6 +54,8 @@ body {
   transition: background-color 0.5s ease, color 0.5s ease;
   font-family: var(--font-sans);
   text-transform: lowercase;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Tooltip Styling */
@@ -74,13 +83,6 @@ body {
 
 input::placeholder {
   text-transform: lowercase;
-}
-
-/* Ensure the animation wrapper takes full height to prevent "jumping" */
-.app-content {
-  position: relative;
-  overflow-x: hidden;
-  width: 100%;
 }
 
 /* Smooth background transition for theme switching */

@@ -26,20 +26,21 @@
 }
 
 /* Main Layout Wrapper */
-.app-content {
-  min-height: calc(100vh - 64px); /* Adjust 64px to your Navbar height */
-  position: relative;
-  width: 100%;
-  /* Prevent horizontal scroll during slide/fade */
-  overflow-x: hidden; 
-  /* Prevent vertical "pop" by hiding overflow during the transition */
-  overflow-y: hidden; 
+.app-shell {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* This ensures the motion.div doesn't create extra spacing */
-.app-content > div {
+.app-content {
   width: 100%;
-  top: 0;
-  left: 0;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  position: relative;
+}
+
+/* AnimatedRoutes wrapper safety */
+.app-content > div {
+  height: 100%;
+  width: 100%;
 }

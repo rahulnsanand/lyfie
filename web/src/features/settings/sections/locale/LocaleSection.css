@@ -1,0 +1,42 @@
+
+.locale-settings h3 {
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.settings-group label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.settings-group select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #ffffff20;
+  background: #00000020;
+  color: white;
+  font-family: inherit;
+}
+
+.preview {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #00000030;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.preview-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}

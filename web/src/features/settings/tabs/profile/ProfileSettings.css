@@ -1,0 +1,11 @@
+.profile-settings-content {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+
+  padding: 3rem 2.5rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}

@@ -1,0 +1,103 @@
+.identity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-title {
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field-row label {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.75rem;
+  background: rgba(255,255,255,0.04);
+}
+
+.value-row.editable {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.value-row.editable:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.value-row.multiline {
+  align-items: flex-start;
+}
+
+.field-row.locked .value-row {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.edit-inline {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-inline input {
+  flex: 1;
+}
+
+.edit-block textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input,
+textarea {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  color: inherit;
+}
+
+.bio-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+.save-btn {
+  font-size: 0.7rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  cursor: pointer;
+}
+
+.profile-settings-content textarea {
+  width: 100%;
+}
+
+.profile-settings-content input,
+.profile-settings-content textarea,
+.profile-settings-content select,
+.profile-settings-content button {
+  font-family: var(--font-sans);
+}
+

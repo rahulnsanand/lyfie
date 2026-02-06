@@ -1,86 +1,30 @@
+/* ===============================
+   Dashboard Layout Container
+   =============================== */
+
 .dashboard-container {
-  /* Increase width to 95% and push max-width to 2560px (4K support) */
   width: 100%;
-  max-width: 2200px; 
+  max-width: 2200px;
   margin: 0 auto;
-  padding: 10px 0 3rem 0; 
+  padding: 1rem 0 3rem;
   perspective: 1000px;
 }
+/* ===============================
+   Bento Grid System (12-column)
+   =============================== */
 
-/* --- Bento Grid --- */
 .bento-grid-12 {
+  min-height: 100%;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-auto-rows: 140px;
   gap: 1.5rem;
-  transform-style: preserve-3d;
 }
 
-.bento-item {
-  position: relative;
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 2rem;
-  padding: 1.5rem;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  z-index: 15;
-}
+/* ===============================
+   Column Spans (Desktop)
+   =============================== */
 
-.item-gradient-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 15;
-  opacity: 0.2;
-  pointer-events: none;
-}
- 
-
-/* TYPE 1: Fluid Waves (Abstract/Organic) */
-.fluid-waves {
-  filter: blur(40px);
-  background: var(--widget-accent);
-  background-image: 
-    radial-gradient(at 0% 0%, var(--widget-accent-light) 0, transparent 50%), 
-    radial-gradient(at 100% 100%, var(--widget-accent-deep) 0, transparent 50%);
-  animation: drift 10s infinite alternate ease-in-out;
-}
-
-/* TYPE 2: Dual Pulse (Two "Energy" sources) */
-.dual-pulse {
-  filter: blur(50px);
-}
-.dual-pulse::before, .dual-pulse::after {
-  content: '';
-  position: absolute;
-  width: 150px; height: 150px;
-  border-radius: 50%;
-  opacity: 0.8;
-}
-.dual-pulse::before {
-  background: var(--widget-accent-light);
-  top: -20px; left: -20px;
-  animation: pulseMove 85s infinite alternate;
-}
-.dual-pulse::after {
-  background: var(--widget-accent-deep);
-  bottom: -20px; right: -20px;
-  animation: pulseMove 5s infinite alternate-reverse;
-}
-
-/* Animations */
-@keyframes drift {
-  from { transform: scale(1) translate(0,0); }
-  to { transform: scale(1.2) translate(-5%, -5%); }
-}
-
-@keyframes pulseMove {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(40px, 40px); }
-}
-
-/* --- Responsive Spans (Desktop) --- */
 .col-2 { grid-column: span 2; }
 .col-3 { grid-column: span 3; }
 .col-4 { grid-column: span 4; }
@@ -88,40 +32,61 @@
 .col-9 { grid-column: span 9; }
 .col-12 { grid-column: span 12; }
 
+/* ===============================
+   Row Spans
+   =============================== */
+
 .row-1 { grid-row: span 1; }
 .row-2 { grid-row: span 2; }
 .row-3 { grid-row: span 3; }
 .row-4 { grid-row: span 4; }
 
-/* --- Tablets (6 Columns) --- */
+/* ===============================
+   Tablet (6-column collapse)
+   =============================== */
+
 @media (max-width: 1100px) {
-  .bento-grid-12 { grid-template-columns: repeat(6, 1fr); }
-  .col-3, .col-4, .col-6, .col-9, .col-12 { grid-column: span 3; } /* Everything takes half width */
-  .col-12 { grid-column: span 6; } /* Full width items */
+  .bento-grid-12 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .col-2,
+  .col-3,
+  .col-4,
+  .col-6,
+  .col-9 {
+    grid-column: span 3;
+  }
+
+  .col-12 {
+    grid-column: span 6;
+  }
 }
 
-/* --- Mobile (Stack Everything while preserving height) --- */
+/* ===============================
+   Mobile (Single Column Stack)
+   =============================== */
+
 @media (max-width: 640px) {
-  .bento-grid-12 { 
-    /* Switch to 1 column instead of flex */
-    display: grid;
-    grid-template-columns: 1fr; 
-    
-    /* Keep the same row height logic from desktop */
-    grid-auto-rows: 140px; 
+  .bento-grid-12 {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 140px;
     gap: 1rem;
   }
 
-  /* Force all items to take full width of the 1 column */
-  .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-12 { 
-    grid-column: span 1; 
+  /* All items full width */
+  .col-2,
+  .col-3,
+  .col-4,
+  .col-6,
+  .col-9,
+  .col-12 {
+    grid-column: span 1;
   }
 
-  /* Crucially: We do NOT override .row-x classes. 
-     A .row-2 item will now stay 280px tall (plus gap), 
-     maintaining that "rich" feel even on a phone.
+  /*
+    IMPORTANT:
+    We intentionally keep row spans intact.
+    A .row-2 item remains tall on mobile.
   */
-  .bento-item {
-    min-height: auto; /* Remove the hardcoded min-height so spans take over */
-  }
 }

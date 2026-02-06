@@ -58,8 +58,6 @@ export default function Navbar({ isLoggedIn, theme, toggleTheme, onLogout }: Nav
       // - It's a single character (a-z, 0-9)
       if (!isSearchOpen && !isTyping && e.key.length === 1 && e.key.match(/[a-z0-9]/i)) {
         setIsSearchOpen(true);
-        // Optional: We don't preventDefault here so the first character 
-        // actually appears in the search input once it focuses
       }
     };
 
@@ -73,7 +71,16 @@ export default function Navbar({ isLoggedIn, theme, toggleTheme, onLogout }: Nav
     <>
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="navbar-left">
-          <Link to="/" className="logo-container">
+          <Link
+            className='logo-container'
+            to="/dashboard"
+            onClick={(e) => {
+              if (location.pathname === "/dashboard") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+          >
             <img src={logo} alt="lyfie logo" className="navbar-logo" />
             <span className="logo-text">lyfie</span>
           </Link>
@@ -91,7 +98,7 @@ export default function Navbar({ isLoggedIn, theme, toggleTheme, onLogout }: Nav
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />    
 
           <div className="nav-links">
-            <Link to="/settings" className="nav-icon-link" title="Settings">
+            <Link to="/settings/profile" className="nav-icon-link" title="Settings">
               <GearIcon size={24} weight="bold" />
             </Link>
             <button onClick={onLogout} className="logout-icon-btn" title="Logout">

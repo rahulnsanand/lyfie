@@ -1,0 +1,120 @@
+/* ======================================================
+   Glass Card — Bento Faithful Version
+   ====================================================== */
+
+.glass-card {
+  position: relative;
+  border-radius: 2rem;
+
+  /* Same glass feel as original */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  background: rgba(255, 255, 255, 0.04);
+
+  /* IMPORTANT: allow menus to escape */
+  overflow: visible;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* ======================================================
+   Energy Container (CLIPPED)
+   ====================================================== */
+
+.glass-card-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  /* Clip gradients, not menus */
+  overflow: hidden;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ======================================================
+   Energy Layer — EXACTLY like original
+   ====================================================== */
+
+.energy-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2; /* same as item-gradient-overlay */
+}
+
+/* TYPE 1: Fluid Waves */
+.fluid-waves {
+  filter: blur(40px);
+  background: var(--widget-accent);
+  background-image:
+    radial-gradient(
+      at 0% 0%,
+      var(--widget-accent-light) 0,
+      transparent 50%
+    ),
+    radial-gradient(
+      at 100% 100%,
+      var(--widget-accent-deep) 0,
+      transparent 50%
+    );
+  animation: drift 10s infinite alternate ease-in-out;
+}
+
+/* TYPE 2: Dual Pulse */
+.dual-pulse {
+  filter: blur(50px);
+}
+
+.dual-pulse::before,
+.dual-pulse::after {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.dual-pulse::before {
+  background: var(--widget-accent-light);
+  top: -20px;
+  left: -20px;
+  animation: pulseMove 8s infinite alternate;
+}
+
+.dual-pulse::after {
+  background: var(--widget-accent-deep);
+  bottom: -20px;
+  right: -20px;
+  animation: pulseMove 5s infinite alternate-reverse;
+}
+
+/* ======================================================
+   Content Layer
+   ====================================================== */
+
+.glass-card-content {
+  position: relative;
+  z-index: 2;
+  padding: 1.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ======================================================
+   Animations (unchanged)
+   ====================================================== */
+
+@keyframes drift {
+  from { transform: scale(1) translate(0,0); }
+  to { transform: scale(1.2) translate(-5%, -5%); }
+}
+
+@keyframes pulseMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(40px, 40px); }
+}

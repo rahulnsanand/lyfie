@@ -2,14 +2,15 @@ import { useState } from 'react';
 import ProfileCard from '@features/dashboard/cards/ProfileCard/ProfileCard';
 import Mood from '@features/dashboard/cards/Mood/Mood';
 import './Dashboard.css';
+import GlassCard, { EnergyStyle } from '@shared/components/GlassEnergyCard/GlassCard';
 
 interface WidgetItem {
   id: string;
   title: string;
   grid: string;
   color: string;
-  styleType: string;
-  Component: React.ComponentType<{ onOpenSettings: () => void }>;
+  styleType: EnergyStyle;
+  Component: React.ComponentType<{ onOpenSettings?: () => void }>;
 }
 
 // Repeat this pattern for Mood, Journal, etc.
@@ -78,27 +79,17 @@ export default function Dashboard() {
     <main className="dashboard-container">
       <div className="bento-grid-12">
         {WIDGET_DATA.map((item) => (
-          <section 
-            key={item.id} 
+          <GlassCard
+            key={item.id}
+            accent={item.color}
+            energy={item.styleType}
             className={`bento-item ${item.grid}`}
-            style={{ 
-              '--widget-accent': item.color,
-              '--widget-accent-deep': `color-mix(in srgb, ${item.color}, black 30%)`,
-              '--widget-accent-light': `color-mix(in srgb, ${item.color}, white 30%)`
-            } as React.CSSProperties}
           >
-            <div className={`item-gradient-overlay ${item.styleType}`} />
-            
-            <header className="item-header" style={{ color: item.color }}>
-              {item.title}
-            </header>
-            <div className="item-content">
-              <item.Component/>
-            </div>
-          </section>
+            <header className="item-header">{item.title}</header>
+            <item.Component />
+          </GlassCard>
         ))}
       </div>
-
     </main>
   );
 }
