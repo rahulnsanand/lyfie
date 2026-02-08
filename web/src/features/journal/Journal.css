@@ -1,5 +1,11 @@
 .journal-layout {
-  height: 100%;
   display: flex;
-  background: var(--surface-0);
+  height: 100%;
+}
+
+.journal-editor-container {
+  flex: 1;
+  padding: 1rem;
+  min-height: 500px;
+  overflow-y: auto;
 }

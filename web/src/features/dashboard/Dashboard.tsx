@@ -1,13 +1,14 @@
 import { useState } from "react";
 import ProfileCard from '@features/dashboard/cards/ProfileCard/ProfileCard';
-import Default from '@features/dashboard/cards/Default/Default';
-import Mood, {
+import Default from '@features/dashboard/cards/DefaultCard/DefaultCard';
+import MoodCard, {
   MoodId,
   MOOD_THEME,
-} from "@features/dashboard/cards/Mood/Mood";
+} from "@features/dashboard/cards/MoodCard/MoodCard";
 import './Dashboard.css';
 import GlassCard, { EnergyStyle } from '@shared/components/GlassEnergyCard/GlassCard';
-import Expense from "@features/dashboard/cards/Expense/Expense";
+import Expense from "@features/dashboard/cards/ExpenseCard/ExpenseCard";
+import JournalCard from "@features/dashboard/cards/JournalCard/JournalCard";
 
 type GridSize = {
   col: number;
@@ -53,7 +54,7 @@ const WIDGET_DATA: WidgetItem[] = [
     zone: 'primary',
     color: 'var(--color-bg-profile-dark)',
     styleType: 'dual-pulse',
-    Component: Mood,
+    Component: MoodCard,
   },
   {
     id: 'ai',
@@ -100,7 +101,7 @@ const WIDGET_DATA: WidgetItem[] = [
     visible: true,
     color: 'var(--color-bg-goals-dark)',
     styleType: 'fluid-waves',
-    Component: Default,
+    Component: JournalCard,
   },
   {
     id: 'events',

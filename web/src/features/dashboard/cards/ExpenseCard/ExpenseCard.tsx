@@ -2,8 +2,9 @@ import React, { useState, useMemo } from "react";
 import { Group } from "@visx/group";
 import { Pie } from "@visx/shape";
 import { motion } from "framer-motion";
+import { interpolate } from "d3-interpolate";
 import { RadioGroup, Radio } from "@headlessui/react";
-import "./Expense.css";
+import "./ExpenseCard.css";
 
 // Data Types
 interface ExpenseEntry {
@@ -23,19 +24,62 @@ const expenseData7D: ExpenseEntry[] = [
 const expenseData30D: ExpenseEntry[] = [
   { category: "Food", amount: 450, color: "#6B7280" },
   { category: "Transport", amount: 300, color: "#A78BFA" },
-  { category: "Shopping", amount: 200, color: "#FDE68A" },
+  { category: "Shopping", amount: 2000, color: "#FDE68A" },
   { category: "Health", amount: 120, color: "#FCA5A5" },
   { category: "Other", amount: 80, color: "#34D399" },
 ];
 
 const width = 300;
 const height = 180;
-const margin = { top: 10, right: 10, bottom: 10, left: 10 };
+const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 const innerWidth = width - margin.left - margin.right;
 const innerHeight = height - margin.top - margin.bottom;
 const radius = Math.min(innerWidth, innerHeight) / 2;
 const centerY = innerHeight / 2;
 const centerX = innerWidth / 2;
+const currencyUnit = "Rs."
+
+// 1. Create a sub-component to handle the smooth morphing
+const AnimatedPath = ({ arc, pathGenerator }: { arc: any, pathGenerator: any }) => {
+  const [d, setD] = React.useState(pathGenerator(arc));
+  const previousArc = React.useRef(arc);
+
+  React.useEffect(() => {
+    // This creates a smooth interpolator between the old arc and new arc
+    const interpolator = interpolate(previousArc.current, arc);
+    
+    let frameId: number;
+    const duration = 600; // ms
+    const start = performance.now();
+
+    const animate = (now: number) => {
+      const elapsed = now - start;
+      const t = Math.min(1, elapsed / duration);
+      
+      // Calculate the "in-between" arc and generate the path string
+      setD(pathGenerator(interpolator(t)));
+
+      if (t < 1) {
+        frameId = requestAnimationFrame(animate);
+      } else {
+        previousArc.current = arc;
+      }
+    };
+
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [arc, pathGenerator]);
+
+  return (
+    <motion.path
+      d={d}
+      fill={arc.data.color}
+      whileHover={{ scale: 1.05, opacity: 0.9 }}
+      transition={{ type: "spring", stiffness: 300 }}
+      style={{ cursor: "pointer", originX: "0px", originY: "0px" }}
+    />
+  );
+};
 
 export default function Expense() {
   const [timeRange, setTimeRange] = useState<"7D" | "30D">("7D");
@@ -86,23 +130,15 @@ export default function Expense() {
             >
               {(pie) => (
                 <g>
-                  {pie.arcs.map((arc) => {
-                    const path = pie.path(arc) || "";
-                    return (
-                      <motion.path
-                        key={arc.data.category}
-                        d={path}
-                        fill={arc.data.color}
-                        initial={false}
-                        animate={{ d: path }}
-                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        whileHover={{ scale: 1.05, opacity: 0.8 }}
-                        style={{ cursor: "pointer" }}
-                      />
-                    );
-                  })}
+                    {pie.arcs.map((arc) => (
+                    <AnimatedPath 
+                        key={arc.data.category} 
+                        arc={arc} 
+                        pathGenerator={pie.path} 
+                    />
+                    ))}
                 </g>
-              )}
+                )}
             </Pie>
             
             {/* Center Label - Optional but recommended for donuts */}
@@ -113,7 +149,7 @@ export default function Expense() {
               fontSize={14}
               fontWeight={700}
             >
-              ${totalAmount}
+              {currencyUnit}{totalAmount}
             </text>
           </Group>
         </svg>
@@ -123,7 +159,6 @@ export default function Expense() {
             <div key={d.category} className="expense-label">
               <span className="dot" style={{ backgroundColor: d.color }}></span>
               <span className="category-name">{d.category}</span>
-              <span className="category-value">${d.amount}</span>
             </div>
           ))}
         </div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Lottie from "lottie-react";
-import "./Mood.css";
+import "./MoodCard.css";
 import { EnergyStyle } from "@shared/components/GlassEnergyCard/GlassCard";
 
 import lazyAnim from "@assets/lottie/lazy.json";
@@ -86,7 +86,7 @@ const UNSET_MOOD: MoodOption = {
    Component
    =============================== */
 
-export default function Mood({
+export default function MoodCard({
   onMoodChange,
 }: {
   onMoodChange?: (moodId: MoodId) => void;

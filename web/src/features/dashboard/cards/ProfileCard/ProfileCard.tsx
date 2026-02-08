@@ -14,7 +14,7 @@ export default function ProfileCard() {
   const navigate = useNavigate();
 
   function handleInfoClick(e: MouseEvent) {
-    e.stopPropagation(); // ⛔ prevent opening settings
+    e.stopPropagation(); 
     setShowVersionInfo((v) => !v);
   }
 
@@ -22,7 +22,7 @@ export default function ProfileCard() {
     <div
       className="profile-inner-layout"
       style={{ cursor: "pointer" }}
-      onClick={() => navigate("/journal")}
+      onClick={() => navigate("/configuration/profile")}
     >
       {/* --- Top Section --- */}
       <div className="profile-top-section">

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import "./Journal.css";
 import JournalSidebar from "./components/JournalSidebar/JournalSidebar";
-import JournalEntry from "./components/JournalEntry/JournalEntry";
 import { generateJournalDays, JournalDay } from "./components/journalDummyData";
-
 const WINDOW_DAYS = 14;
 
 export default function Journal() {
   const [windowStart, setWindowStart] = useState(new Date());
+  const [journalContent, setJournalContent] = useState<Record<string, any>>({});
+
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
@@ -42,10 +42,9 @@ export default function Journal() {
         onScrollWeek={scrollWeek}
       />
 
-      <JournalEntry
-        date={selectedDay.date}
-        content={selectedDay.content}
-      />
+      {/* Main journal editor area */}
+      <div className="journal-editor-container">
+      </div>      
     </div>
   );
 }

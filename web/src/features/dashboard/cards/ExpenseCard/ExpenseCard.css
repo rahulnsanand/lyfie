@@ -1,5 +1,4 @@
 .expense-card-modern {
-  border-radius: 1rem;
   padding-top: 1rem;
 }
 
@@ -29,6 +28,11 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+text {
+  transition: all 0.6s ease;
+  font-variant-numeric: tabular-nums;
 }
 
 .dot {
