@@ -5,6 +5,7 @@ export default function LocaleSection() {
   const [locale, setLocale] = useState("en-IN");
   const [timezone, setTimezone] = useState("Asia/Kolkata");
   const [timeFormat, setTimeFormat] = useState<"12" | "24">("12");
+  const [firstDayOfWeek, setFirstDayOfWeek] = useState<"Sunday" | "Monday">("Sunday");
 
   const now = new Date();
 
@@ -41,6 +42,14 @@ export default function LocaleSection() {
           <option value="Europe/London">London</option>
           <option value="Asia/Dubai">Dubai</option>
           <option value="Asia/Singapore">Singapore</option>
+        </select>
+      </div>
+
+      <div className="settings-group">
+        <label>First Day of Week</label>
+        <select value={firstDayOfWeek} onChange={(e) => setFirstDayOfWeek(e.target.value as "Sunday" | "Monday")}>
+          <option value="Monday">Monday</option>
+          <option value="Sunday">Sunday</option>
         </select>
       </div>
 

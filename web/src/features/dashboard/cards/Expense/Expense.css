@@ -1,0 +1,86 @@
+.expense-card-modern {
+  border-radius: 1rem;
+  padding-top: 1rem;
+}
+
+.expense-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.expense-toggle-headless {
+  display: flex;
+  align-items: center;
+}
+
+.expense-body {
+  display: flex;
+  align-items: center;
+}
+
+.expense-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.expense-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.expense-toggle-pill {
+  display: flex;
+  align-items: center;
+}
+
+.pill-container {
+  position: relative;
+  display: flex;
+  background: rgba(0, 0, 0, 0.05); /* Soft recessed background */
+  border-radius: 999px;
+  padding: 2px;
+  width: 100px;
+  height: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pill-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  outline: none;
+}
+
+.pill-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  transition: color 0.3s ease;
+}
+
+.pill-label.active {
+  color: #111827;
+}
+
+.pill-highlight {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  width: calc(50% - 2px);
+  background: white;
+  border-radius: 999px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}

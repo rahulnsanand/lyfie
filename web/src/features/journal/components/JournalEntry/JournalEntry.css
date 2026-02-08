@@ -1,0 +1,48 @@
+.journal-entry {
+  flex: 1;
+  padding: 2.5rem;
+}
+
+.entry-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.editor-shell {
+  background: var(--surface-1);
+  border-radius: 18px;
+  padding: 2rem;
+  min-height: 65vh;
+  position: relative;
+}
+
+.journal-editor-root {
+  outline: none;
+  font-family: "Comfortaa", sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.editor-placeholder {
+  position: absolute;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Theme mappings */
+.journal-paragraph {
+  margin-bottom: 1.1rem;
+}
+
+.journal-bold {
+  font-weight: 600;
+}
+
+.journal-italic {
+  font-style: italic;
+}
+
+.journal-underline {
+  text-decoration: underline;
+}

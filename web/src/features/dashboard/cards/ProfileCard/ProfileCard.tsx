@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState, MouseEvent } from "react";
 import { InfoIcon } from "@phosphor-icons/react";
 import "./ProfileCard.css";
@@ -10,6 +11,7 @@ export default function ProfileCard() {
   const currentVersion = "1.2.1";
   const latestVersion = "1.3.0";
   const isOutdated = currentVersion !== latestVersion;
+  const navigate = useNavigate();
 
   function handleInfoClick(e: MouseEvent) {
     e.stopPropagation(); // ⛔ prevent opening settings
@@ -20,6 +22,7 @@ export default function ProfileCard() {
     <div
       className="profile-inner-layout"
       style={{ cursor: "pointer" }}
+      onClick={() => navigate("/journal")}
     >
       {/* --- Top Section --- */}
       <div className="profile-top-section">

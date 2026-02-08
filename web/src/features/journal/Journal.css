@@ -1,0 +1,5 @@
+.journal-layout {
+  height: 100%;
+  display: flex;
+  background: var(--surface-0);
+}

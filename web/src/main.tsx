@@ -7,6 +7,7 @@ import App from '@app/App'
 import '@app/providers/I18nProvider';
 import { db } from '@shared/persistence/database';
 import { AuthProvider } from '@shared/hooks/AuthContext';
+import RouteErrorReset from '@shared/components/ErrorBoundary/RouteErrorReset';
 
 registerSW({ immediate: true });
 
@@ -21,8 +22,10 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <RouteErrorReset>
+          <App />
+        </RouteErrorReset>
       </AuthProvider>
     </BrowserRouter>
-  </StrictMode>,
-)
+  </StrictMode>
+);

@@ -1,9 +1,13 @@
-import React from 'react';
-import './GlassCard.css';
+import React from "react";
+import "./GlassCard.css";
 
-export type EnergyStyle = 'fluid-waves' | 'dual-pulse';
+export type EnergyStyle = "fluid-waves" | "dual-pulse";
 
-type GlassCardProps = {
+/* ===============================
+   Props
+   =============================== */
+
+type GlassCardProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
   accent?: string;
   energy?: EnergyStyle;
@@ -11,26 +15,36 @@ type GlassCardProps = {
 };
 
 type CSSVars = React.CSSProperties & {
-  '--widget-accent'?: string;
-  '--widget-accent-light'?: string;
-  '--widget-accent-deep'?: string;
+  "--widget-accent"?: string;
+  "--widget-accent-light"?: string;
+  "--widget-accent-deep"?: string;
 };
+
+/* ===============================
+   Component
+   =============================== */
 
 export default function GlassCard({
   children,
-  accent = '#62a145',
+  accent = "#62a145",
   energy,
-  className = '',
+  className = "",
+  style,
+  ...rest
 }: GlassCardProps) {
-
   const styleVars: CSSVars = {
-    '--widget-accent': accent,
-    '--widget-accent-light': `color-mix(in srgb, ${accent}, white 35%)`,
-    '--widget-accent-deep': `color-mix(in srgb, ${accent}, black 30%)`,
+    "--widget-accent": accent,
+    "--widget-accent-light": `color-mix(in srgb, ${accent}, white 35%)`,
+    "--widget-accent-deep": `color-mix(in srgb, ${accent}, black 30%)`,
+    ...style,
   };
 
   return (
-    <div className={`glass-card ${className}`} style={styleVars}>
+    <div
+      {...rest}
+      className={`glass-card ${className}`}
+      style={styleVars}
+    >
       <div className="glass-card-bg">
         {energy && <div className={`energy-layer ${energy}`} />}
       </div>

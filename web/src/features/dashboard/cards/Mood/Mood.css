@@ -1,0 +1,177 @@
+/* ===============================
+   Anchor (1x1 card)
+   =============================== */
+
+.mood-anchor {
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.mood-lottie-anchor {
+  width: clamp(48px, 60%, 96px);
+  height: auto;
+  transition: transform 200ms ease;
+}
+
+.mood-anchor:hover .mood-lottie-anchor {
+  transform: scale(1.08);
+}
+
+/* ===============================
+   Flyout
+   =============================== */
+
+.mood-flyout {
+  position: fixed;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  z-index: 9999;
+
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+
+  animation: flyoutIn 160ms cubic-bezier(.22,.61,.36,1);
+}
+
+@keyframes flyoutIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* ===============================
+   Mood Options
+   =============================== */
+
+.mood-option {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0.65;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.mood-option:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.mood-option.active {
+  opacity: 1;
+}
+
+.mood-lottie-option {
+  width: 44px;
+  height: 44px;
+}
+
+.mood-label {
+  font-size: 0.65rem;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+}
+
+/* ===============================
+   Full Page Mood Overlay
+   =============================== */
+
+.mood-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+
+  display: grid;
+  place-items: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.18),
+      rgba(0, 0, 0, 0.65)
+    );
+
+  backdrop-filter: blur(18px);
+  animation: overlayFadeIn 160ms ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.mood-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  animation: overlayPop 220ms cubic-bezier(.22,.61,.36,1);
+}
+
+@keyframes overlayPop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.mood-overlay-lottie {
+  width: clamp(120px, 22vw, 220px);
+}
+
+.mood-overlay-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  opacity: 0.9;
+}
+
+/* ===============================
+   Overlay Text
+   =============================== */
+
+.mood-overlay-text {
+  margin-top: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mood-overlay-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.mood-overlay-subtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  opacity: 0.85;
+}

@@ -1,7 +1,6 @@
 .profile-user-content { 
   display: flex; 
   flex-direction: row;  
-  gap: 3rem;
   align-items: flex-start;
   color: var(--color-text-main);
 } 
@@ -11,9 +10,8 @@
   padding: 3rem 2.5rem; 
 } 
 
-/* Avatar column controls centering, not flex */
 .avatar-column {  
   min-height: 100%;
-  padding-top: 2rem; /* visual centering baseline */
+  padding-top: 2rem; 
   transition: transform 0.25s ease, opacity 0.25s ease;
 }

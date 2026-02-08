@@ -32,14 +32,21 @@
   flex-direction: column;
 }
 
+/* Full-width content area */
 .app-content {
   width: 100%;
-  padding-left: 5vw;
-  padding-right: 5vw;
   position: relative;
+  flex: 1;
 }
 
-/* AnimatedRoutes wrapper safety */
+/* ONLY inner page padding */
+.content-container {
+  width: 100%;
+  padding-left: clamp(1rem, 1vw, 4rem);
+  padding-right: clamp(1rem, 1vw, 4rem);
+}
+
+/* AnimatedRoutes safety */
 .app-content > div {
   height: 100%;
   width: 100%;

@@ -10,9 +10,10 @@ import Navbar from '@shared/components/Navbar/Navbar';
 import { AnimatedRoutes } from '@shared/routes/AnimatedRoute';
 
 // Pages
-import Login from '@features/auth/pages/Login';
-import Dashboard from '@features/dashboard/pages/Dashboard';
-import Settings from '@features/settings/Settings';
+import Login from '@features/auth/Login';
+import Dashboard from '@features/dashboard/Dashboard';
+import Settings from '@features/configuration/Configuration';
+import Journal from '@features/journal/Journal';
 
 import './App.css';
 import { ScrollToTop } from '@shared/routes/ScrollToTop';
@@ -33,30 +34,64 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      {/* FULL-WIDTH NAVBAR */}
       <Navbar
         isLoggedIn={isAuthenticated}
         theme={theme}
         toggleTheme={toggleTheme}
       />
+
+      {/* FULL-WIDTH MAIN */}
       <main className="app-content">
         <ScrollToTop />
         <AnimatedRoutes>
-          <Routes location={location} key={location.pathname}>
-            {/* Public Routes */}
-            <Route path="/auth" element={
-              <PublicRoute isAuthenticated={isAuthenticated}>
-                <Login onLogin={login} />
-              </PublicRoute>
-            } />
+          <div className="content-container">
+            <Routes location={location} key={location.pathname}>
+              <Route
+                path="/auth"
+                element={
+                  <PublicRoute isAuthenticated={isAuthenticated}>
+                    <Login onLogin={login} />
+                  </PublicRoute>
+                }
+              />
 
-            {/* Protected Routes */}
-            <Route path="/dashboard" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Dashboard /></ProtectedRoute>} />
-            <Route path="/settings/*" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Settings /></ProtectedRoute>} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute isAuthenticated={isAuthenticated}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
 
-            {/* Redirects */}
-            <Route path="/" element={<Navigate to={isAuthenticated ? "/dashboard" : "/auth"} />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
+              <Route
+                path="/configuration/*"
+                element={
+                  <ProtectedRoute isAuthenticated={isAuthenticated}>
+                    <Settings />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/journal/*"
+                element={
+                  <ProtectedRoute isAuthenticated={isAuthenticated}>
+                    <Journal />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/"
+                element={
+                  <Navigate to={isAuthenticated ? "/dashboard" : "/auth"} />
+                }
+              />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
         </AnimatedRoutes>
       </main>
     </div>

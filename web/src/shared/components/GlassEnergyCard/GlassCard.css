@@ -4,7 +4,7 @@
 
 .glass-card {
   position: relative;
-  border-radius: 2rem;
+  border-radius: 1.5rem;
 
   /* Same glass feel as original */
   backdrop-filter: blur(20px);
@@ -99,11 +99,36 @@
 .glass-card-content {
   position: relative;
   z-index: 2;
-  padding: 1.5rem;
+  padding: 0.5rem;
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box; 
+  border-radius: inherit; 
+  overflow: hidden; 
 }
+
+/* Fix header/margin bleed */
+.glass-card-content > *:first-child {
+  margin-top: 0.15rem;
+  margin-left: 0.15rem;
+  color: var(--color-text-muted);
+}
+
+.glass-card-content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Optional: make all headers inside respect card padding */
+.glass-card-content h1,
+.glass-card-content h2,
+.glass-card-content h3,
+.glass-card-content h4,
+.glass-card-content h5,
+.glass-card-content h6 {
+  margin: 0.25rem 0; /* minimal, stays inside rounded edges */
+}
+
 
 /* ======================================================
    Animations (unchanged)

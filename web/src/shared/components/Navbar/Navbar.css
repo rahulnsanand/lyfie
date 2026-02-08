@@ -7,7 +7,7 @@
   top: 0;
   left: 0;
   right: 0;
-  width: 90%;
+  width: 100%;
   height: 80px;
   margin: 0 auto;
   display: flex;
@@ -41,7 +41,6 @@
 
 .navbar-logo {
   height: 40px;
-  transition: height var(--nav-transition);
 }
 
 .logo-container {
@@ -55,7 +54,6 @@
   font-weight: 700;
   font-size: 1.75rem;
   color: var(--color-brand-pink);
-  transition: font-size var(--nav-transition);
 }
 
 .navbar.scrolled .navbar-logo { height: 30px; }

@@ -1,8 +1,8 @@
 import './ProfileSettings.css';
-import AvatarSection from "../../sections/avatar/AvatarSection";
+import AvatarSection from "@features/configuration/sections/avatar/AvatarSection";
 import GlassCard from "@shared/components/GlassEnergyCard/GlassCard";
-import IdentitySection from '@features/settings/sections/identity/IdentitySection';
-import LocaleSection from '@features/settings/sections/locale/LocaleSection';
+import IdentitySection from '@features/configuration/sections/identity/IdentitySection';
+import LocaleSection from '@features/configuration/sections/locale/LocaleSection';
 import { useAuth } from '@shared/hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 

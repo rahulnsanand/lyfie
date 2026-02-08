@@ -3,7 +3,6 @@
   flex-direction: column;
   height: 100%;
   padding: 0.5rem;
-  color: white;
   color: var(--color-text-main);
 }
 
@@ -39,8 +38,8 @@
 
 /* --- Stats --- */
 .profile-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: auto;
 }
