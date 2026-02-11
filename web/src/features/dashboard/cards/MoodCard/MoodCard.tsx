@@ -25,11 +25,11 @@ export type MoodId =
   | "low"
   | "angry";
 
-type MoodOption = {
+interface MoodOption {
   id: MoodId;
   label: string;
   animation: any;
-};
+}
 
 export const MOOD_THEME: Record<
   MoodId,

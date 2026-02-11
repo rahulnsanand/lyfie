@@ -10,10 +10,10 @@ import GlassCard, { EnergyStyle } from '@shared/components/GlassEnergyCard/Glass
 import Expense from "@features/dashboard/cards/ExpenseCard/ExpenseCard";
 import JournalCard from "@features/dashboard/cards/JournalCard/JournalCard";
 
-type GridSize = {
+interface GridSize {
   col: number;
   row: number;
-};
+}
 
 type GridZone = 'primary' | 'secondary' | 'tertiary';
 

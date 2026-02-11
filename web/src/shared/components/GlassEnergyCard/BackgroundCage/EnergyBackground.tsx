@@ -1,7 +1,7 @@
-type EnergyBackgroundProps = {
+interface EnergyBackgroundProps {
   color: string;
   styleType: 'fluid-waves' | 'dual-pulse';
-};
+}
 
 export default function EnergyBackground({
   color,

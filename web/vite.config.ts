@@ -12,6 +12,7 @@ export default defineConfig({
       '@locales': path.resolve(__dirname, 'src/locales'),
       '@shared': path.resolve(__dirname, 'src/shared'),
       '@styles': path.resolve(__dirname, 'src/styles'),
+      '@modules': path.resolve(__dirname, 'src/modules'),
     }
   },
   plugins: [react(),

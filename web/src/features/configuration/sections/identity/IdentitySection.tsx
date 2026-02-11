@@ -9,7 +9,7 @@ import {
 } from '@phosphor-icons/react';
 import './IdentitySection.css';
 
-type Props = {
+interface Props {
   displayName: string;
   email: string;
   bio: string;
@@ -22,7 +22,7 @@ type Props = {
     }>
   ) => void;
   onLogout: () => void;
-};
+}
 
 type EditingField = 'name' | 'bio' | 'dob' | null;
 

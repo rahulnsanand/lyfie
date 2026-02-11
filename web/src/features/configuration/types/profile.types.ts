@@ -1,4 +1,4 @@
-export type Profile = {
+export interface Profile {
   avatarUrl: string;
   displayName: string;
   username: string;
@@ -16,4 +16,4 @@ export type Profile = {
   website: string;
   github: string;
   linkedin: string;
-};
+}

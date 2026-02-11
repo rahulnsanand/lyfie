@@ -2,9 +2,9 @@ import { Menu } from '@headlessui/react';
 import { useRef, useState } from 'react';
 import './AvatarSection.css';
 
-type Props = {
+interface Props {
   avatarUrl: string;
-};
+}
 
 const DEFAULT_AVATAR =
   'https://avatars.githubusercontent.com/u/41159815?v=4';
