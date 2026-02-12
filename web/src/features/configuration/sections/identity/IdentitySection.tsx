@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Popover, Dialog, Transition } from '@headlessui/react';
+import * as Popover from '@radix-ui/react-popover';
+import * as Dialog from '@radix-ui/react-dialog';
 import {
   PencilSimpleIcon,
   LockIcon,
@@ -100,17 +101,19 @@ export default function IdentitySection({
         <div className="field-row">
           <label>Date of Birth</label>
 
-          <Popover className="dob-wrapper">
-            <Popover.Button className="dob-display">
-              <input
-                readOnly
-                value={formattedDob}
-                placeholder="Select a date"
-              />
-              <CalendarBlankIcon size={16} />
-            </Popover.Button>
+          <Popover.Root>
+            <Popover.Trigger asChild>
+              <button type="button" className="dob-display">
+                <span
+                  className={`dob-display-text ${formattedDob ? '' : 'is-empty'}`}
+                >
+                  {formattedDob || 'Select a date'}
+                </span>
+                <CalendarBlankIcon size={16} />
+              </button>
+            </Popover.Trigger>
 
-            <Popover.Panel className="dob-panel">
+            <Popover.Content className="dob-panel" sideOffset={8} align="start">
               <input
                 type="date"
                 value={dobDraft}
@@ -129,8 +132,8 @@ export default function IdentitySection({
                   Save
                 </button>
               )}
-            </Popover.Panel>
-          </Popover>
+            </Popover.Content>
+          </Popover.Root>
         </div>
 
         {/* Bio */}
@@ -184,16 +187,11 @@ export default function IdentitySection({
       </section>
       
       {/* Logout Confirmation Modal */}
-      <Transition appear show={confirmLogoutOpen} as="div">
-        <Dialog
-          as="div"
-          className="logout-dialog-root"
-          onClose={() => setConfirmLogoutOpen(false)}
-        >
-          <div className="logout-backdrop" />
-
+      <Dialog.Root open={confirmLogoutOpen} onOpenChange={setConfirmLogoutOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="logout-backdrop" />
           <div className="logout-dialog-wrapper">
-            <Dialog.Panel className="logout-dialog">
+            <Dialog.Content className="logout-dialog">
               <WarningCircleIcon size={28} className="logout-icon" />
 
               <Dialog.Title className="logout-title">
@@ -219,10 +217,10 @@ export default function IdentitySection({
                   Log out
                 </button>
               </div>
-            </Dialog.Panel>
+            </Dialog.Content>
           </div>
-        </Dialog>
-      </Transition>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   );
 }

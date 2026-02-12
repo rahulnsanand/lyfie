@@ -74,7 +74,7 @@ text {
   transition: color 0.3s ease;
 }
 
-.pill-label.active {
+.pill-option[data-state="checked"] .pill-label {
   color: #111827;
 }
 

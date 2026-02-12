@@ -1,12 +1,10 @@
-import { useState } from 'react';
-import React from 'react';
+import { useState, type FormEvent } from 'react';
 import { authService } from '@features/auth/services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import logo from '@assets/logo.svg';
 import './Login.css';
 import toast, { Toaster } from 'react-hot-toast';
-import { Button, Field, Input, Transition } from '@headlessui/react';
 
 interface LoginProps {
   onLogin: (status: boolean) => void;
@@ -50,7 +48,7 @@ export default function Login({ onLogin }: LoginProps) {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();   
     if (!isFormValid()) return;
 
@@ -80,29 +78,23 @@ export default function Login({ onLogin }: LoginProps) {
           <h2 className="auth-title">{t('appname')}</h2>
         </div>
 
-        <Transition
-          show={isNewUser}
-          enter="transition-all duration-300 ease-out"
-          enterFrom="opacity-0 -translate-y-4 max-h-0"
-          enterTo="opacity-100 translate-y-0 max-h-20"
-          leave="transition-all duration-200 ease-in"
-          leaveFrom="opacity-100 max-h-20"
-          leaveTo="opacity-0 -translate-y-4 max-h-0"
-        >
-          <Field className="mb-4">
-            <Input
+        <div className={`auth-collapse ${isNewUser ? 'is-visible' : ''}`} aria-hidden={!isNewUser}>
+          <div className="auth-collapse-inner">
+            <input
               type="text"
               placeholder={t('auth.text.name')}
               className="auth-input-field"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required={isNewUser}
+              disabled={!isNewUser}
+              tabIndex={isNewUser ? 0 : -1}
             />
-          </Field>
-        </Transition>
+          </div>
+        </div>
 
-        <Field>
-          <Input 
+        <div>
+          <input 
             type="email" 
             placeholder={isNewUser ? t('auth.text.user_email') : t('auth.text.admin_email')}
             className="auth-input-field" 
@@ -110,10 +102,10 @@ export default function Login({ onLogin }: LoginProps) {
             onChange={(e) => setEmail(e.target.value)} 
             required 
           />
-        </Field>
+        </div>
 
-        <Field>
-          <Input 
+        <div>
+          <input 
             type="password" 
             placeholder={isNewUser ? t('auth.text.user_password') : t('auth.text.admin_password')}
             className="auth-input-field" 
@@ -121,30 +113,24 @@ export default function Login({ onLogin }: LoginProps) {
             onChange={(e) => setPassword(e.target.value)} 
             required 
           />
-        </Field>
+        </div>
 
-        <Transition
-          show={isNewUser}
-          enter="transition-all duration-300 ease-out"
-          enterFrom="opacity-0 -translate-y-4 max-h-0"
-          enterTo="opacity-100 translate-y-0 max-h-20"
-          leave="transition-all duration-200 ease-in"
-          leaveFrom="opacity-100 max-h-20"
-          leaveTo="opacity-0 -translate-y-4 max-h-0"
-        >
-          <Field className="mb-4">
-            <Input
+        <div className={`auth-collapse ${isNewUser ? 'is-visible' : ''}`} aria-hidden={!isNewUser}>
+          <div className="auth-collapse-inner">
+            <input
               type="password"
               value={confirm_password}
               placeholder={t('auth.text.user_confirm_password')}
               className="auth-input-field"
               onChange={(e) => setConfirmPassword(e.target.value)}
               required={isNewUser}
+              disabled={!isNewUser}
+              tabIndex={isNewUser ? 0 : -1}
             />
-          </Field>
-        </Transition>
+          </div>
+        </div>
 
-        <Button
+        <button
           type="submit"
           disabled={isLoading}
           className={`auth-submit-btn ${isLoading ? 'is-loading' : ''}`}
@@ -154,7 +140,7 @@ export default function Login({ onLogin }: LoginProps) {
               ? (isNewUser ? t('auth.text.signing_up') : t('auth.text.signing_in'))
               : (isNewUser ? t('auth.text.sign_up') : t('auth.text.sign_in'))}
           </span>
-        </Button>
+        </button>
 
          <p className="auth-footer-text">
           {isNewUser ? t('auth.message.already_have_account') + ' ' : t('auth.message.dont_have_account') + ' '}

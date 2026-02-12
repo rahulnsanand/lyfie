@@ -1,6 +1,10 @@
 .journal-layout {
   display: flex;
   height: 100%;
+  padding: 1rem;
+  justify-content: space-evenly;
+  min-height: 500px;
+  max-width: 1200px;
 }
 
 .journal-editor-container {

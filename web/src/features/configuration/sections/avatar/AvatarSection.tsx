@@ -1,4 +1,4 @@
-import { Menu } from '@headlessui/react';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useRef, useState } from 'react';
 import './AvatarSection.css';
 
@@ -40,50 +40,36 @@ export default function AvatarSection({ avatarUrl }: Props) {
 
   return (
     <section className="settings-avatar-section">
-      <Menu as="div" className="avatar-wrapper">
-        <Menu.Button className="avatar-button">
-          <img
-            src={preview ?? currentAvatar}
-            className="avatar-image"
-          />
-          <div className="avatar-overlay">Edit</div>
-        </Menu.Button>
+      <DropdownMenu.Root>
+        <div className="avatar-wrapper">
+          <DropdownMenu.Trigger asChild>
+            <button type="button" className="avatar-button">
+              <img
+                src={preview ?? currentAvatar}
+                className="avatar-image"
+              />
+              <div className="avatar-overlay">Edit</div>
+            </button>
+          </DropdownMenu.Trigger>
 
-        <Menu.Items className="avatar-menu">
-          <Menu.Item>
-            {({ active }) => (
-              <button
-                className={active ? 'active' : ''}
-                onClick={viewAvatar}
-              >
-                View image
-              </button>
-            )}
-          </Menu.Item>
+          <DropdownMenu.Content className="avatar-menu" sideOffset={12} align="center">
+            <DropdownMenu.Item className="avatar-menu-item" onSelect={viewAvatar}>
+              View image
+            </DropdownMenu.Item>
 
-          <Menu.Item>
-            {({ active }) => (
-              <button
-                className={active ? 'active' : ''}
-                onClick={() => fileInputRef.current?.click()}
-              >
-                Change
-              </button>
-            )}
-          </Menu.Item>
+            <DropdownMenu.Item
+              className="avatar-menu-item"
+              onSelect={() => fileInputRef.current?.click()}
+            >
+              Change
+            </DropdownMenu.Item>
 
-          <Menu.Item>
-            {({ active }) => (
-              <button
-                className={`danger ${active ? 'active' : ''}`}
-                onClick={deleteAvatar}
-              >
-                Delete
-              </button>
-            )}
-          </Menu.Item>
-        </Menu.Items>
-      </Menu>
+            <DropdownMenu.Item className="avatar-menu-item danger" onSelect={deleteAvatar}>
+              Delete
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </div>
+      </DropdownMenu.Root>
 
       {preview && (
         <div className="avatar-actions">

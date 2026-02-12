@@ -3,7 +3,7 @@ import { Group } from "@visx/group";
 import { Pie } from "@visx/shape";
 import { motion } from "framer-motion";
 import { interpolate } from "d3-interpolate";
-import { RadioGroup, Radio } from "@headlessui/react";
+import * as RadioGroup from "@radix-ui/react-radio-group";
 import "./ExpenseCard.css";
 
 // Data Types
@@ -93,7 +93,11 @@ export default function Expense() {
   return (
     <div className="expense-card expense-card-modern">
       <div className="expense-header">
-        <RadioGroup value={timeRange} onChange={setTimeRange} className="expense-toggle-pill">
+        <RadioGroup.Root
+          value={timeRange}
+          onValueChange={(value) => setTimeRange(value as "7D" | "30D")}
+          className="expense-toggle-pill"
+        >
             <div className="pill-container">
                 <motion.div 
                 className="pill-highlight"
@@ -103,18 +107,14 @@ export default function Expense() {
                     left: timeRange === "7D" ? "2px" : "50%",
                 }}
                 />
-                <Radio value="7D" className="pill-option">
-                {({ checked }) => (
-                    <span className={`pill-label ${checked ? "active" : ""}`}>7D</span>
-                )}
-                </Radio>
-                <Radio value="30D" className="pill-option">
-                {({ checked }) => (
-                    <span className={`pill-label ${checked ? "active" : ""}`}>30D</span>
-                )}
-                </Radio>
+                <RadioGroup.Item value="7D" className="pill-option" aria-label="Last 7 days">
+                  <span className="pill-label">7D</span>
+                </RadioGroup.Item>
+                <RadioGroup.Item value="30D" className="pill-option" aria-label="Last 30 days">
+                  <span className="pill-label">30D</span>
+                </RadioGroup.Item>
             </div>
-         </RadioGroup>
+         </RadioGroup.Root>
       </div>
 
       <div className="expense-body">

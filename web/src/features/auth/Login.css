@@ -109,24 +109,24 @@
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-/* Container for the hidden field */
-.confirm-password-wrapper {
-    display: grid;
-    grid-template-rows: 0fr; 
-    transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease-out;
-    opacity: 0;
-    overflow: hidden;
+/* Collapsible helper for optional fields */
+.auth-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease-out, transform 0.2s ease-out;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-6px);
 }
 
-/* Expanded state when visible */
-.confirm-password-wrapper.is-visible {
-    grid-template-rows: 1fr; /* Expand to fit content */
-    opacity: 1;
+.auth-collapse.is-visible {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* Ensure the input inside doesn't snap */
-.confirm-password-wrapper > input {
-    min-height: 0; 
+.auth-collapse-inner {
+  min-height: 0;
 }
 
 @keyframes pulse-glow {

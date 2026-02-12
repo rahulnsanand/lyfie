@@ -69,7 +69,7 @@
   z-index: 1000; /* 🔑 beat glass stacking */
 }
 
-.avatar-menu button {
+.avatar-menu-item {
   width: 100%;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
@@ -80,13 +80,14 @@
   text-align: left;
 
   cursor: pointer;
+  outline: none;
 }
 
-.avatar-menu button.active {
+.avatar-menu-item[data-highlighted] {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.avatar-menu button.danger {
+.avatar-menu-item.danger {
   color: #f87171;
 }
 
