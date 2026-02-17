@@ -1,62 +1,89 @@
-# --- Build & Tools ---
-.nx/
-.cache/
-.parcel-cache/
+# =========================
+# 1. DEPENDENCIES & LOGS
+# =========================
+# Node (Frontend)
+**/node_modules/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+**/.pnpm-store/
 
-# --- .NET Specific Additions ---
-# Ensure logs and crash dumps aren't uploaded
-*.log
-*.stackdump
-
-# EF Core Migrations (If you use them, you usually want to keep them, 
-# but ignore the script files sometimes generated)
-*.sql
-
-# --- React / Vite Additions ---
-# Vite builds occasionally generate these
-**/stats.html
-
-# --- Testing ---
-**/TestResults/
-**/coverage/
-
-# --- OS / IDE ---
-.vs/
-.vscode/
-.idea/
-.DS_Store
-*.user
-*.suo
-*.sw?
-
-# --- .NET (Backend) ---
+# .NET (Backend)
 **/bin/
 **/obj/
 **/publish/
-*.db
-*.db-journal
+*.log
+*.stackdump
 
-# Secrets: Ignore dev-specific and local settings
-# Keep the base appsettings.json for structure, ignore the rest
-**/appsettings.Development.json
-**/appsettings.Local.json
-**/appsettings.json.user
-
-# --- Node / React (Frontend) ---
-**/node_modules/
+# =========================
+# 2. BUILD OUTPUTS
+# =========================
+# Vite / React
 **/dist/
 **/dist-ssr/
-**/npm-debug.log*
-**/yarn-debug.log*
-**/pnpm-debug.log*
+**/stats.html
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
 
-# Frontend Secrets
-**/.env
-**/.env.local
-**/.env.*.local
+# .NET
+**/TestResults/
+**/coverage/
+**/reports/
 
-# --- Project Specific ---
-.nx/
-api/lyfie.api/data/keys/key-12463931-b109-448c-9383-1c813416153b.xml
+# =========================
+# 3. ENVIRONMENT & SECRETS (CRITICAL)
+# =========================
+# Frontend Secrets (Vite/React)
+.env
+.env.local
+.env.*.local
+*.pem
+
+# Backend Secrets (.NET)
+# Keep appsettings.json (structure), ignore actual secrets
+**/appsettings.Development.json
+**/appsettings.Production.json
+**/appsettings.Local.json
+**/appsettings.json.user
+**/secrets.json
+
+# Data Protection Keys (Prevent committing encryption keys)
+**/api/lyfie.api/data/keys/*.xml
+
+# Local Databases (SQLite)
+*.db
+*.db-journal
 *.db-shm
 *.db-wal
+*.sqlite
+
+# =========================
+# 4. IDE & OS FILES
+# =========================
+# VS Code / Visual Studio / JetBrains
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/settings.json
+.idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS Junk
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =========================
+# 5. TOOLS & MISC
+# =========================
+.nx/
+*.sw?
+*.sql

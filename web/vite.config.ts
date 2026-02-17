@@ -5,6 +5,7 @@ import path from 'path';
 
 export default defineConfig({
   resolve: {
+    dedupe: ['lexical', '@lexical/react', 'react', 'react-dom'],
     alias: {
       '@app': path.resolve(__dirname, 'src/app'),
       '@assets': path.resolve(__dirname, 'src/assets'),
@@ -22,6 +23,7 @@ export default defineConfig({
         // This ensures that your API calls (/api/...) are NOT handled 
         // by the service worker, allowing cookies to pass through normally.
         navigateFallbackDenylist: [/^\/api/], 
+        maximumFileSizeToCacheInBytes: 3000000,
       },
       manifest: {
         name: 'Lyfie App',
@@ -34,6 +36,27 @@ export default defineConfig({
         ]
       }
     })],
+    build: {
+    rollupOptions: {
+      output: {
+        // This splits Lexical into its own file so your main app code is tiny
+        manualChunks: {
+          'lexical': ['lexical', '@lexical/react', '@lexical/utils'],
+          'vendor': ['react', 'react-dom', 'framer-motion']
+        }
+      }
+    }
+  },
+  optimizeDeps: {
+    // Force Vite to exclude these from pre-bundling 
+    // to ensure they are resolved to the same instance
+    include: [
+      '@lexical/react/LexicalRichTextPlugin',
+      '@lexical/react/LexicalContentEditable',
+      '@lexical/react/LexicalComposerContext',
+      'lexical'
+    ],
+  },
   server: {
     port: 5173, // Vite port
     proxy: {
